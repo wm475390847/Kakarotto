@@ -1,4 +1,5 @@
 .idea/
+*/target
 
 
 *.iws
@@ -7,9 +8,6 @@
 
 logs
 report
-sp-db/target
-sp-service/target
-sp-web/target
 
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
