@@ -11,7 +11,7 @@ import java.io.Serializable;
  * 返回值对象
  *
  * @author wangmin
- * @date 2021/9/28 3:02 下午
+ * @date 2022/5/17 13:05
  */
 @Data
 public class ResponseInfo implements Serializable {

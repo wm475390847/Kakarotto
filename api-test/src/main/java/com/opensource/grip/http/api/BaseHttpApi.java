@@ -12,7 +12,7 @@ import java.util.Map;
 
 /**
  * @author wangmin
- * @date 2022/5/16 17:53
+ * @date 2022/5/17 13:05
  */
 public abstract class BaseHttpApi implements IApi<Response> {
 

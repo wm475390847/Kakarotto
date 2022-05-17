@@ -5,7 +5,7 @@ import com.opensource.grip.http.logger.ResponseLog;
 
 /**
  * @author wangmin
- * @date 2022/5/16 17:52
+ * @date 2022/5/17 13:05
  */
 public interface IApi<T> {
 

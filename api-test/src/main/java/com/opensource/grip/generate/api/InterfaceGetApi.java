@@ -10,7 +10,7 @@ import lombok.Builder;
  * 活动列表接口
  *
  * @author wangmin
- * @date 2021/9/28 2:36 下午
+ * @date 2022/5/17 13:05
  */
 @Builder
 public class InterfaceGetApi extends BaseHttpApi {

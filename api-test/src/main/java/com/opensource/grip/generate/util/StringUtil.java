@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
  * 字符串处理工具
  *
  * @author wangmin
- * @date 2020/7/27 14:17
+ * @date 2022/5/17 13:05
  */
 public class StringUtil {
     private static final Pattern LINE_PATTERN = Pattern.compile("[_|-](\\w)");

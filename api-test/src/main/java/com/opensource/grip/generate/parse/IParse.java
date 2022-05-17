@@ -6,7 +6,7 @@ import java.util.List;
  * 自动生成文件服务
  *
  * @author wangmin
- * @date 2021/12/18 5:30 下午
+ * @date 2022/5/17 13:05
  */
 public interface IParse<T> {
 

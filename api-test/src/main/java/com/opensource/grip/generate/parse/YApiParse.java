@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * yapi的解析类
  *
  * @author wangmin
- * @date 2021/12/21 10:04 上午
+ * @date 2022/5/17 13:05
  */
 @Slf4j
 public class YApiParse extends BaseApiParse<ApiInfo> {

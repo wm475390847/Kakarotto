@@ -7,7 +7,7 @@ import lombok.Getter;
  * 抽象解析类
  *
  * @author wangmin
- * @date 2021/12/21 10:03 上午
+ * @date 2022/5/17 13:05
  */
 @Getter
 public abstract class BaseApiParse<T> implements IParse<T> {

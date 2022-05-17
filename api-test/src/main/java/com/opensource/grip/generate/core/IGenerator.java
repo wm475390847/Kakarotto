@@ -4,7 +4,7 @@ package com.opensource.grip.generate.core;
  * 生成器接口
  *
  * @author wangmin
- * @date 2022/1/12 11:21 上午
+ * @date 2022/5/17 13:05
  */
 public interface IGenerator {
 
