@@ -7,7 +7,6 @@ import com.opensource.grip.generate.pojo.Structure;
 import com.opensource.grip.generate.util.ParseUtil;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 import java.util.List;
@@ -16,7 +15,6 @@ import java.util.List;
  * @author wangmin
  * @date 2022/5/17 13:05
  */
-@Slf4j
 public class ApiGenerator extends BaseGenerator<ApiInfo> {
     private final String suffix;
 
@@ -43,7 +41,7 @@ public class ApiGenerator extends BaseGenerator<ApiInfo> {
                     .setOutputPath(outputPath).setFileSuffix(FileFormatEnum.JAVA.getSuffix());
 
             if (ftlParam.getApiPath() != null && ftlParam.getAttrs().size() != 0) {
-                log.info("structure: {}", structure);
+                logger.info("structure: {}", structure);
                 structureMap.put(i, structure);
             }
         }

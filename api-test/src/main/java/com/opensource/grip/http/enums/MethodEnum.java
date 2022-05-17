@@ -1,10 +1,8 @@
 package com.opensource.grip.http.enums;
 
 import com.google.common.base.Preconditions;
+import com.opensource.grip.http.core.*;
 import lombok.Getter;
-import com.opensource.grip.http.core.AbstractCommand;
-import com.opensource.grip.http.core.GetCommand;
-import com.opensource.grip.http.core.PostCommand;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -22,9 +20,9 @@ public enum MethodEnum {
 
     GET("GET", new GetCommand()),
 
-    DELETE("DELETE", new PostCommand()),
+    DELETE("DELETE", new DeleteCommand()),
 
-    PUT("PUT", new PostCommand()),
+    PUT("PUT", new PutCommand()),
     ;
 
     MethodEnum(String type, AbstractCommand command) {

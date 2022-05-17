@@ -2,6 +2,7 @@ package com.opensource.grip.http.config;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,17 +14,13 @@ import java.util.Map;
  * @date 2022/5/17 13:05
  */
 @Data
+@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class HeadersConfig extends AbstractConfig {
 
     private String host;
     private String ip;
     private Map<String, String> requestHeaders = new HashMap<>();
-
-    @Override
-    protected HeadersConfig addConfig() {
-        return this;
-    }
 
     /**
      * 设置请求头中的referer

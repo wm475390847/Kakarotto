@@ -1,8 +1,5 @@
 package com.opensource.grip.http.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * 抽象配置类
  *
@@ -10,40 +7,20 @@ import java.util.Map;
  * @date 2022/5/17 13:05
  */
 public abstract class AbstractConfig implements IConfig {
-
-    private static final Map<String, IConfig> CONFIG_HASH_MAP = new HashMap<>(16);
+    private IConfig config;
 
     @Override
-    public boolean init() {
-        IConfig iConfig = addConfig();
-        CONFIG_HASH_MAP.put(iConfig.getClass().getSimpleName(), iConfig);
-        Context.CONFIG = this;
-        return Context.CONFIG.isEmpty();
+    public void setConfig(IConfig config) {
+        this.config = config;
     }
 
     @Override
     public IConfig currentConfig() {
-        return this;
-    }
-
-    @Override
-    public <T extends IConfig> T getChildrenConfig(T t) {
-        Map.Entry<String, IConfig> entry = CONFIG_HASH_MAP.entrySet().stream()
-                .filter(e -> t.getClass().getSimpleName().equals(e.getKey()))
-                .findFirst().orElse(null);
-        return (T) entry.getValue();
+        return this.config;
     }
 
     @Override
     public boolean isEmpty() {
-        return CONFIG_HASH_MAP.isEmpty();
+        return config == null;
     }
-
-    /**
-     * 添加配置
-     * 子类实现此方法
-     *
-     * @return 返回子类配置
-     */
-    protected abstract IConfig addConfig();
 }

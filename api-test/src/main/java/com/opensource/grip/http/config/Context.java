@@ -1,5 +1,7 @@
 package com.opensource.grip.http.config;
 
+import com.opensource.grip.http.container.IConfigContainer;
+
 /**
  * 上下文配置
  *
@@ -7,5 +9,5 @@ package com.opensource.grip.http.config;
  * @date 2022/5/17 13:05
  */
 public class Context {
-    public static IConfig CONFIG = null;
+    public static IConfigContainer configContainer = null;
 }

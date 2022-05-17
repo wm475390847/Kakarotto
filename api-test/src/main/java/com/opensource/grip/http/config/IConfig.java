@@ -5,12 +5,6 @@ package com.opensource.grip.http.config;
  * @date 2022/5/17 13:05
  */
 public interface IConfig {
-    /**
-     * 初始化配置
-     *
-     * @return 是否成功
-     */
-    boolean init();
 
     /**
      * 获取当前配置
@@ -19,13 +13,8 @@ public interface IConfig {
      */
     IConfig currentConfig();
 
-    /**
-     * 获取子类配置
-     *
-     * @param t 子类类型
-     * @return 子类
-     */
-    <T extends IConfig> T getChildrenConfig(T t);
+
+    void setConfig(IConfig config);
 
     /**
      * 配置为空返回true

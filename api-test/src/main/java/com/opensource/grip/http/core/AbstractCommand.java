@@ -1,11 +1,12 @@
 package com.opensource.grip.http.core;
 
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import com.opensource.grip.http.api.Api;
 import com.opensource.grip.http.config.HeadersConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -22,8 +23,8 @@ import java.util.concurrent.TimeUnit;
  * @author wangmin
  * @date 2022/5/17 13:05
  */
-@Slf4j
 public abstract class AbstractCommand {
+    private static final Logger logger = LoggerFactory.getLogger(AbstractCommand.class);
 
     public Response execute(HeadersConfig config, String url, Api api) {
         Request.Builder builder = new Request.Builder();
@@ -52,13 +53,13 @@ public abstract class AbstractCommand {
     }
 
     private void ignoreSsl(final OkHttpClient.Builder okHttpClientBuilder) {
-        log.info("https请求忽略SSL证书");
+        logger.info("https请求忽略SSL证书");
         SSLContext sslContext = null;
         try {
             sslContext = SSLContext.getInstance("SSL");
             sslContext.init(null, new TrustManager[]{TRUST_MANAGER}, new SecureRandom());
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
-            log.error("SSLContext初始化异常:{}", e.getMessage());
+            logger.error("SSLContext初始化异常:{}", e.getMessage());
         }
         SSLSocketFactory sslSocketFactory = sslContext != null ? sslContext.getSocketFactory() : null;
         if (sslSocketFactory != null) {

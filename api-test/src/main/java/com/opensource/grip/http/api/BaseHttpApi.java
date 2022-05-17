@@ -37,7 +37,7 @@ public abstract class BaseHttpApi implements IApi<Response> {
 
         HeadersConfig config;
         if (api.getHeaders().isEmpty()) {
-            config = getConfig().getChildrenConfig(new HeadersConfig());
+            config = (HeadersConfig) getConfig();
         } else {
             Map<String, String> headers = api.getHeaders();
             config = new HeadersConfig();
@@ -56,7 +56,7 @@ public abstract class BaseHttpApi implements IApi<Response> {
 
     @Override
     public IConfig getConfig() {
-        return Context.CONFIG;
+        return Context.configContainer.findConfig(new HeadersConfig());
     }
 
     /**

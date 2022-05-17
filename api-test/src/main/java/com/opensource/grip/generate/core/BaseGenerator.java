@@ -8,8 +8,9 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.HashMap;
@@ -22,9 +23,11 @@ import java.util.Map;
  * @author wangmin
  * @date 2022/5/17 13:05
  */
-@Slf4j
 @Getter
 public abstract class BaseGenerator<P> implements IGenerator {
+
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private final String templatePath;
     private final String templateName;
     private final String outputPath;
@@ -49,9 +52,9 @@ public abstract class BaseGenerator<P> implements IGenerator {
                 String outputPath = value.getOutputPath();
                 File file = new File(outputPath);
                 if (!file.exists()) {
-                    log.info("开始创建文件所在文件夹 :{}", outputPath);
+                    logger.info("开始创建文件所在文件夹 :{}", outputPath);
                     Preconditions.checkArgument(file.mkdirs(), "文件夹创建失败 !");
-                    log.info("文件所在文件夹创建成功 !");
+                    logger.info("文件所在文件夹创建成功 !");
                 }
                 try {
                     // step1 创建freeMarker配置实例
@@ -65,7 +68,7 @@ public abstract class BaseGenerator<P> implements IGenerator {
                     //step5 生成数据
                     File docFile = new File(outputPath + value.getClassName() + FileFormatEnum.findBySuffix(value.getFileSuffix()).getSuffix());
                     String info = !docFile.exists() ? writerFile(template, dataMap, docFile) : "文件已存在 !";
-                    log.info("----------{}----------", info);
+                    logger.info("----------{}----------", info);
                 } catch (IOException | TemplateException e) {
                     e.printStackTrace();
                 }
