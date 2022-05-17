@@ -1,0 +1,48 @@
+package com.opensource.grip.test.auto;
+
+import com.alibaba.fastjson.JSONObject;
+import com.opensource.grip.http.api.Api;
+import com.opensource.grip.http.api.BaseHttpApi;
+import lombok.Builder;
+
+/**
+ * 权限点列表 吕楠青
+ *
+ * @author wangmin
+ * @date Tue May 17 12:54:20 CST 2022
+ */
+@Builder
+public class ApiPrivilegesGetApi extends BaseHttpApi {
+    /**
+     * 描述：
+     * 是否必填：true
+     */
+    private final String project;
+    /**
+     * 描述：
+     * 是否必填：true
+     */
+    private final String ProjectName;
+    /**
+     * 描述：
+     * 是否必填：false
+     */
+    private final String systemKey;
+
+    @Override
+    protected Api buildApi() {
+        return new Api.Builder()
+                .path("/school/api/privileges")
+                .method("GET")
+                .contentType("application/json")
+                .urlParam("project", project)
+                .urlParam("project_name", ProjectName)
+                .urlParam("systemKey", systemKey)
+                .build();
+    }
+
+    @Override
+    protected JSONObject getBody() {
+        return null;
+    }
+}
