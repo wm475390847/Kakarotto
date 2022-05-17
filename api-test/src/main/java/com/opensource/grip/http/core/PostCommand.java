@@ -18,7 +18,8 @@ public class PostCommand extends AbstractCommand {
 
         // 发起post请求
         Object bodyContent = api.getBodyContent();
-        RequestBody requestBody = RequestBody.create(mediaType, bodyContent.toString());
+        RequestBody requestBody = bodyContent == null ? RequestBody.create(mediaType, new byte[0])
+                : RequestBody.create(mediaType, bodyContent.toString());
         builder.post(requestBody);
     }
 }

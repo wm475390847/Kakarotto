@@ -18,11 +18,8 @@ public class DeleteCommand extends AbstractCommand {
 
         // 发起delete请求
         Object bodyContent = api.getBodyContent();
-        if (bodyContent == null) {
-            builder.delete();
-        } else {
-            RequestBody requestBody = RequestBody.create(mediaType, bodyContent.toString());
-            builder.delete(requestBody);
-        }
+        RequestBody requestBody = bodyContent == null ? RequestBody.create(mediaType, new byte[0])
+                : RequestBody.create(mediaType, bodyContent.toString());
+        builder.delete(requestBody);
     }
 }
