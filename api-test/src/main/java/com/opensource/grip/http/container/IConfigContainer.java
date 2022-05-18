@@ -12,9 +12,14 @@ import com.opensource.grip.http.config.IConfig;
 public interface IConfigContainer {
 
     /**
-     * 初始化配置容器
+     * 初始化上下文
      */
-    void init();
+    void initContext();
+
+    /**
+     * 加载容器
+     */
+    void load();
 
     /**
      * 获取配置容器内所有的配置类

@@ -26,10 +26,16 @@ public abstract class AbstractConfigContainer implements IConfigContainer {
     private Object properties;
 
     @Override
-    public void init() {
-        load();
+    public void initContext() {
         Context.configContainer = this;
     }
+
+    /**
+     * 加载容器
+     * 子类实现
+     */
+    @Override
+    public abstract void load();
 
     @Override
     public IConfig[] getConfigs() {
@@ -40,7 +46,7 @@ public abstract class AbstractConfigContainer implements IConfigContainer {
     @Override
     public void setConfig(IConfig config) {
         addConfig(config);
-        init();
+        initContext();
     }
 
     @Override
@@ -67,10 +73,4 @@ public abstract class AbstractConfigContainer implements IConfigContainer {
     protected void addConfig(IConfig config) {
         configMap.put(config.getClass().getSimpleName(), config);
     }
-
-    /**
-     * 加载容器
-     * 子类实现
-     */
-    protected abstract void load();
 }
