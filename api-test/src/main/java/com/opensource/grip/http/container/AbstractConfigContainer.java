@@ -3,6 +3,8 @@ package com.opensource.grip.http.container;
 import com.google.common.base.Preconditions;
 import com.opensource.grip.http.config.Context;
 import com.opensource.grip.http.config.IConfig;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -19,8 +21,13 @@ public abstract class AbstractConfigContainer implements IConfigContainer {
 
     private final Map<String, IConfig> configMap = new HashMap<>(16);
 
+    @Setter
+    @Getter
+    private Object properties;
+
     @Override
     public void init() {
+        load();
         Context.configContainer = this;
     }
 
@@ -52,16 +59,6 @@ public abstract class AbstractConfigContainer implements IConfigContainer {
     }
 
     /**
-     * 添加属性
-     * 由子类实现，当properties为空时，可以不用
-     *
-     * @param properties 属性
-     * @param <T>        泛型T
-     */
-    @Override
-    public abstract <T> void addProperties(T properties);
-
-    /**
      * 添加配置类
      * 子类必须调用实现才可以将自定义的配置类添加到容器内部
      *
@@ -70,4 +67,10 @@ public abstract class AbstractConfigContainer implements IConfigContainer {
     protected void addConfig(IConfig config) {
         configMap.put(config.getClass().getSimpleName(), config);
     }
+
+    /**
+     * 加载容器
+     * 子类实现
+     */
+    protected abstract void load();
 }

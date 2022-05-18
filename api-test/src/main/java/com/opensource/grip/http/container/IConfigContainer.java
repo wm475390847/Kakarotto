@@ -38,7 +38,7 @@ public interface IConfigContainer {
      * @param properties 属性
      * @param <T>        泛型T
      */
-    <T> void addProperties(T properties);
+    void setProperties(Object properties);
 
     /**
      * 查询指定配置类
