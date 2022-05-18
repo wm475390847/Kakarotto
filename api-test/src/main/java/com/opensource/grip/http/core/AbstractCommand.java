@@ -20,15 +20,26 @@ import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * okhttp的请求调用基类
+ *
  * @author wangmin
  * @date 2022/5/17 13:05
  */
 public abstract class AbstractCommand {
     private static final Logger logger = LoggerFactory.getLogger(AbstractCommand.class);
 
-    public Response execute(HeadersConfig config, String url, Api api) {
+    /**
+     * 执行请求
+     * <p>传入公共头部配置&完整的url&每个接口的属性来调用一个http/https请求
+     *
+     * @param headersConfig 头部配置类
+     * @param url           url
+     * @param api           Api类
+     * @return 响应体
+     */
+    public Response execute(HeadersConfig headersConfig, String url, Api api) {
         Request.Builder builder = new Request.Builder();
-        config.getRequestHeaders().forEach(builder::addHeader);
+        headersConfig.getRequestHeaders().forEach(builder::addHeader);
 
         buildRequest(builder, api);
 
@@ -52,6 +63,20 @@ public abstract class AbstractCommand {
         return response;
     }
 
+    /**
+     * 构建请求
+     * <P>需要子类实现
+     *
+     * @param builder 请求构建者
+     * @param api     Api类
+     */
+    protected abstract void buildRequest(Request.Builder builder, Api api);
+
+    /**
+     * 是否忽略ssl证书
+     *
+     * @param okHttpClientBuilder okHttpClientBuilder
+     */
     private void ignoreSsl(final OkHttpClient.Builder okHttpClientBuilder) {
         logger.info("https请求忽略SSL证书");
         SSLContext sslContext = null;
@@ -84,13 +109,11 @@ public abstract class AbstractCommand {
     };
 
     /**
-     * 构建请求
+     * 判断请求utl是否为https的请求
      *
-     * @param builder 请求构建者
-     * @param api     接口参数类
+     * @param url url
+     * @return 是为true，不是为false
      */
-    protected abstract void buildRequest(Request.Builder builder, Api api);
-
     private boolean isHttps(String url) {
         return url.contains("https://");
     }

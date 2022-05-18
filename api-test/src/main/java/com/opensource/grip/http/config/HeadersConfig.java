@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 标头配置类
+ * 头部配置类
  *
  * @author wangmin
  * @date 2022/5/17 13:05
@@ -77,7 +77,6 @@ public class HeadersConfig extends AbstractConfig {
         requestHeaders.put(key, value);
         return this;
     }
-
 
     /**
      * 设置host

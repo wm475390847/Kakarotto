@@ -8,6 +8,9 @@ import java.util.Arrays;
 import java.util.Optional;
 
 /**
+ * 请求枚举
+ * <P>请求映射相应的请求命令类
+ *
  * @author wangmin
  * @date 2022/5/17 13:05
  */
@@ -18,27 +21,43 @@ public enum MethodEnum {
      */
     POST("POST", new PostCommand()),
 
+    /**
+     * get请求
+     */
     GET("GET", new GetCommand()),
 
+    /**
+     * delete请求
+     */
     DELETE("DELETE", new DeleteCommand()),
 
+    /**
+     * put请求
+     */
     PUT("PUT", new PutCommand()),
     ;
 
-    MethodEnum(String type, AbstractCommand command) {
-        this.type = type;
+    MethodEnum(String methodType, AbstractCommand command) {
+        this.methodType = methodType;
         this.command = command;
     }
 
     @Getter
-    private final String type;
+    private final String methodType;
 
     @Getter
     private final AbstractCommand command;
 
-    public static MethodEnum findEnumByType(String type) {
-        Preconditions.checkArgument(type != null, "类型不存在");
-        Optional<MethodEnum> any = Arrays.stream(MethodEnum.values()).filter(e -> e.getType().equals(type)).findAny();
+    /**
+     * 通过请求方法类型查询对应的枚举值
+     *
+     * @param methodType 请求类型
+     * @return 对应的MethodEnum
+     */
+    public static MethodEnum findEnumByType(String methodType) {
+        Preconditions.checkArgument(methodType != null, "类型不存在");
+        Optional<MethodEnum> any = Arrays.stream(MethodEnum.values())
+                .filter(e -> e.getMethodType().equals(methodType)).findAny();
         Preconditions.checkArgument(any.isPresent(), "类型不存在");
         return any.get();
     }

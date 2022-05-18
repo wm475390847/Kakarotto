@@ -28,7 +28,7 @@ public class InterfaceGetApi extends BaseHttpApi {
     }
 
     @Override
-    protected JSONObject getBody() {
+    protected JSONObject buildBody() {
         return null;
     }
 }

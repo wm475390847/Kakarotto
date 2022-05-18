@@ -40,10 +40,20 @@ public class ResponseInfo implements Serializable {
     @JSONField(name = "total")
     private Long total;
 
+    /**
+     * 获取JSONObject类型的响应体
+     *
+     * @return 响应体
+     */
     public JSONObject getJsonData() {
         return (JSONObject) this.data;
     }
 
+    /**
+     * 获取JSONArray类型的响应体
+     *
+     * @return 响应体
+     */
     public JSONArray getArrayData() {
         return (JSONArray) this.data;
     }

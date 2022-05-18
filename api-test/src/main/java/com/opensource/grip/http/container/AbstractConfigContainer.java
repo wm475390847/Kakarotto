@@ -24,15 +24,6 @@ public abstract class AbstractConfigContainer implements IConfigContainer {
         Context.configContainer = this;
     }
 
-    /**
-     * 添加属性
-     *
-     * @param t   属性
-     * @param <T> T
-     */
-    @Override
-    public abstract <T> void addProperties(T t);
-
     @Override
     public IConfig[] getConfigs() {
         List<IConfig> configs = new LinkedList<>(configMap.values());
@@ -40,8 +31,14 @@ public abstract class AbstractConfigContainer implements IConfigContainer {
     }
 
     @Override
+    public void setConfig(IConfig config) {
+        addConfig(config);
+        init();
+    }
+
+    @Override
     public <C> IConfig findConfig(C key) {
-        Preconditions.checkArgument(key != null, "获取指定配置key不能为空");
+        Preconditions.checkArgument(key != null, "获取指定配置类 key不能为空");
         Map.Entry<String, IConfig> entry = configMap.entrySet().stream()
                 .filter(e -> e.getKey().equals(key.getClass().getSimpleName()))
                 .findFirst().orElse(null);
@@ -55,7 +52,18 @@ public abstract class AbstractConfigContainer implements IConfigContainer {
     }
 
     /**
+     * 添加属性
+     * 由子类实现，当properties为空时，可以不用
+     *
+     * @param properties 属性
+     * @param <T>        泛型T
+     */
+    @Override
+    public abstract <T> void addProperties(T properties);
+
+    /**
      * 添加配置类
+     * 子类必须调用实现才可以将自定义的配置类添加到容器内部
      *
      * @param config 配置类
      */

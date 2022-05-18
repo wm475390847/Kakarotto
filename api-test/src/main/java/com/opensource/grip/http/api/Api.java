@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * api类
+ * Api类
+ * <P>接口实现调用所需要的属性
  *
  * @author wangmin
  * @date 2022/5/17 13:05

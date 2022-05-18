@@ -3,7 +3,8 @@ package com.opensource.grip.http.container;
 import com.opensource.grip.http.config.IConfig;
 
 /**
- * 配置容器，约束接口
+ * 配置容器接口
+ * <P>用来存放所有的自定义配置
  *
  * @author wangmin
  * @date 2022/5/17 16:05
@@ -16,33 +17,42 @@ public interface IConfigContainer {
     void init();
 
     /**
-     * 添加属性
+     * 获取配置容器内所有的配置类
      *
-     * @param <T> T
-     * @param t   属性
-     */
-    <T> void addProperties(T t);
-
-    /**
-     * 获取所有的配置类
-     *
-     * @return 配置类
+     * @return 配置类数组
      */
     IConfig[] getConfigs();
 
     /**
-     * 查询指定配置
+     * 设置容器内的配置类
+     * <P>设置新的配置类后会重新初始化配置容器
      *
-     * @param key key
-     * @param <C> C
-     * @return 配置
+     * @param config 配置类
+     */
+    void setConfig(IConfig config);
+
+    /**
+     * 向配置容器内添加属性
+     * <P>属性的作用：读取resources文件夹内的数据，将其传入容器内部供配置类使用
+     *
+     * @param properties 属性
+     * @param <T>        泛型T
+     */
+    <T> void addProperties(T properties);
+
+    /**
+     * 查询指定配置类
+     *
+     * @param key new C()
+     * @param <C> 泛型C
+     * @return 配置类
      */
     <C> IConfig findConfig(C key);
 
     /**
      * 判断配置容器是否为空
      *
-     * @return true or false
+     * @return 容器内部为空时返回true，不为空时返回false
      */
     boolean isEmpty();
 }

@@ -24,6 +24,11 @@ public class ResponseLog<T> {
     private static final String SYSTEM_LINE_SEPARATOR = System.getProperty("line.separator");
     private static final String BLANK = "    ";
 
+    /**
+     * 获取字符类型的响应体
+     *
+     * @return 响应体
+     */
     public String getStrResult() {
         if (StringUtils.isEmpty(strResult)) {
             try {
@@ -43,12 +48,22 @@ public class ResponseLog<T> {
         return this.strResult;
     }
 
+    /**
+     * 获取映射类型的响应体
+     *
+     * @return 响应体
+     */
     public ResponseInfo getObjResult() {
         String strResult = getStrResult();
         JSONObject object = JSONObject.parseObject(strResult);
         return JSONObject.toJavaObject(object, ResponseInfo.class);
     }
 
+    /**
+     * 获取响应时间
+     *
+     * @return 时间
+     */
     public long getResponseTime() {
         return endTime - startTime;
     }
@@ -58,6 +73,11 @@ public class ResponseLog<T> {
         return buildLog();
     }
 
+    /**
+     * 构建日志格式
+     *
+     * @return 日志
+     */
     private String buildLog() {
         StringBuilder sb = new StringBuilder();
         sb.append("Api Request Log:").append(SYSTEM_LINE_SEPARATOR)
