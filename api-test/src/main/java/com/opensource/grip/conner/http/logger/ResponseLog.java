@@ -2,6 +2,7 @@ package com.opensource.grip.conner.http.logger;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Preconditions;
+import com.opensource.grip.conner.http.config.HeadersConfig;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import okhttp3.Response;
@@ -10,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import com.opensource.grip.conner.http.api.Api;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * 结果日志
@@ -81,29 +81,30 @@ public class ResponseLog<T> {
     private String buildLog() {
         StringBuilder sb = new StringBuilder();
         sb.append("Api Request Log:").append(SYSTEM_LINE_SEPARATOR)
-                .append(BLANK).append("-headers:").append(headers == null ? api.getHeaders() : headers).append(SYSTEM_LINE_SEPARATOR)
-                .append(BLANK).append("-method:").append(api.getMethod()).append(SYSTEM_LINE_SEPARATOR)
-                .append(BLANK).append("-url:").append(url).append(SYSTEM_LINE_SEPARATOR);
+                .append(BLANK).append("-headers: ")
+                .append(config == null ? api.getHeaders() : config.getRequestHeaders())
+                .append(SYSTEM_LINE_SEPARATOR)
+                .append(BLANK).append("-method: ").append(api.getMethod()).append(SYSTEM_LINE_SEPARATOR)
+                .append(BLANK).append("-url: ").append(url).append(SYSTEM_LINE_SEPARATOR);
 
         //param
         if (!api.getPartParams().isEmpty()) {
-            sb.append(BLANK).append("-partParam:").append(api.getPartParams()).append(SYSTEM_LINE_SEPARATOR);
+            sb.append(BLANK).append("-partParam: ").append(api.getPartParams()).append(SYSTEM_LINE_SEPARATOR);
         } else if (api.getBodyContent() != null) {
-            sb.append(BLANK).append("-body:").append(api.getBodyContent()).append(SYSTEM_LINE_SEPARATOR);
+            sb.append(BLANK).append("-body: ").append(api.getBodyContent()).append(SYSTEM_LINE_SEPARATOR);
         } else if (!api.getUrlParams().isEmpty()) {
-            sb.append(BLANK).append("-param:");
+            sb.append(BLANK).append("-param: ");
             api.getUrlParams().forEach((key, value) -> sb.append(key).append("=").append(value).append("&"));
             sb.replace(sb.length() - 1, sb.length(), "").append(SYSTEM_LINE_SEPARATOR);
         }
 
         //response
-        sb.append(BLANK).append("-response:").append(getStrResult()).append(SYSTEM_LINE_SEPARATOR)
-                .append(BLANK).append("-response time:").append(getResponseTime()).append("ms");
+        sb.append(BLANK).append("-response: ").append(getStrResult()).append(SYSTEM_LINE_SEPARATOR)
+                .append(BLANK).append("-response time: ").append(getResponseTime()).append("ms");
         return sb.toString();
     }
 
-    private Map<String, String> headers;
-    private ResponseInfo objResult;
+    private HeadersConfig config;
     private String strResult;
     private long startTime;
     private long endTime;

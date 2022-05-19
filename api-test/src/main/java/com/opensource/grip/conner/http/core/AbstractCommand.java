@@ -39,8 +39,9 @@ public abstract class AbstractCommand {
      */
     public Response execute(HeadersConfig headersConfig, String url, Api api) {
         Request.Builder builder = new Request.Builder();
-        headersConfig.getRequestHeaders().forEach(builder::addHeader);
-
+        if (headersConfig != null) {
+            headersConfig.getRequestHeaders().forEach(builder::addHeader);
+        }
         buildRequest(builder, api);
 
         Request request = builder.url(url).build();

@@ -35,15 +35,15 @@ public abstract class BaseHttpApi implements IApi<Response> {
 
         MethodEnum method = MethodEnum.findEnumByType(api.getMethod());
 
-        HeadersConfig config = api.getHeaders().isEmpty()
-                ? (HeadersConfig) getConfig() : new HeadersConfig().setRequestHeaders(api.getHeaders());
+        HeadersConfig config = api.getHeaders().isEmpty() ? (HeadersConfig) getConfig()
+                : new HeadersConfig().setRequestHeaders(api.getHeaders());
 
         String url = buildUrl(buildBaseUrl(config, api), api);
 
         long startTime = System.currentTimeMillis();
         Response response = method.getCommand().execute(config, url, api);
-        log.setHeaders(config.getRequestHeaders()).setStartTime(startTime).setEndTime(System.currentTimeMillis())
-                .setResponse(response).setUrl(url).setApi(api);
+        log.setConfig(config).setApi(api).setStartTime(startTime).setEndTime(System.currentTimeMillis())
+                .setResponse(response).setUrl(url);
         return log;
     }
 
@@ -54,6 +54,9 @@ public abstract class BaseHttpApi implements IApi<Response> {
 
     @Override
     public IConfig getConfig() {
+        if (Context.configContainer == null) {
+            return null;
+        }
         return Context.configContainer.findConfig(new HeadersConfig());
     }
 
@@ -142,13 +145,13 @@ public abstract class BaseHttpApi implements IApi<Response> {
      * 构建基础url
      * <P>POST请求则为完整的url，GET请求则为?前面的url
      *
-     * @param headersConfig 头部配置类
-     * @param api           Api类
+     * @param config 头部配置类
+     * @param api    Api类
      * @return url 基础的url
      */
-    private String buildBaseUrl(HeadersConfig headersConfig, Api api) {
+    private String buildBaseUrl(HeadersConfig config, Api api) {
         Preconditions.checkNotNull(api, "api is null");
-        String hostName = api.getHost() == null ? headersConfig.getHost() : api.getHost();
+        String hostName = api.getHost() == null ? config.getHost() : api.getHost();
         String path = api.getPath();
         StringBuilder sb = new StringBuilder(hostName);
         if (path != null) {
