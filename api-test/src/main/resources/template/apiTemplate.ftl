@@ -1,8 +1,8 @@
 package ${packagePath};
 
 import com.alibaba.fastjson.JSONObject;
-import com.opensource.grip.http.api.Api;
-import com.opensource.grip.http.api.BaseHttpApi;
+import com.opensource.grip.conner.http.api.Api;
+import com.opensource.grip.conner.http.api.BaseHttpApi;
 import lombok.Builder;
 
 /**

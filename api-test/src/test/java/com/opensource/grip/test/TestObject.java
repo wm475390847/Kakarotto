@@ -1,12 +1,5 @@
 package com.opensource.grip.test;
 
-import com.opensource.grip.generate.core.ApiGenerator;
-import com.opensource.grip.generate.core.IGenerator;
-import com.opensource.grip.generate.parse.IParse;
-import com.opensource.grip.generate.parse.YApiParse;
-import com.opensource.grip.generate.pojo.ApiInfo;
-import org.testng.annotations.Test;
-
 /**
  * @author wangmin
  * @date 2022/5/17 11:28

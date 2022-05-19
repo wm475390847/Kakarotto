@@ -17,14 +17,6 @@
         <jdk.version>1.8</jdk.version>
     </properties>
 
-    <developers>
-        <developer>
-            <id>wangmin</id>
-            <name>wangmin</name>
-            <email>475390847@qq.com</email>
-        </developer>
-    </developers>
-
     <dependencies>
         <!--lombok-->
         <dependency>
@@ -152,4 +144,5 @@
             <url>http://116.62.222.54/repository/maven-snapshots</url>
         </snapshotRepository>
     </distributionManagement>
+
 </project>
