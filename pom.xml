@@ -7,6 +7,7 @@
     <modules>
         <module>api-test</module>
         <module>mybatis-theory</module>
+        <module>service-monitoring</module>
     </modules>
 
     <groupId>com.opensource</groupId>
