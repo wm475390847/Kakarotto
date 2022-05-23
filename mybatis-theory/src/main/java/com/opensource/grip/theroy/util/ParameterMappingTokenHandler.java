@@ -7,9 +7,9 @@ import java.util.List;
  * @author wangmin
  */
 public class ParameterMappingTokenHandler implements TokenHandler {
-    private List<ParameterMapping> parameterMappings = new ArrayList<ParameterMapping>();
+    private List<ParameterMapping> parameterMappings = new ArrayList<>();
 
-    // context是参数名称 #{id} #{username}
+    // content是参数名称 #{id} #{username}
 
     @Override
     public String handleToken(String content) {
