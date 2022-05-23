@@ -8,6 +8,7 @@
         <module>api-test</module>
         <module>mybatis-theory</module>
         <module>service-monitoring</module>
+        <module>table-dispose</module>
     </modules>
 
     <groupId>com.opensource</groupId>
