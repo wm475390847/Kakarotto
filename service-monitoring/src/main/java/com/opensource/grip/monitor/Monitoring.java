@@ -4,9 +4,9 @@ import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.system.oshi.CpuInfo;
 import cn.hutool.system.oshi.OshiUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.opensource.grip.conner.talk.MarkdownTalk;
 import com.opensource.grip.monitor.enums.GpuTypeEnum;
 import com.opensource.grip.monitor.pojo.*;
-import com.xhzy.qa.sports.common.send.MarkdownTalk;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;

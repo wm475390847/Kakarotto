@@ -5,6 +5,12 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <artifactId>grip</artifactId>
+        <groupId>com.opensource</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
     <groupId>com.opensource.grip</groupId>
     <artifactId>server-monitoring</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -15,12 +21,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-
         <dependency>
             <groupId>net.java.dev.jna</groupId>
             <artifactId>jna</artifactId>
@@ -86,10 +86,13 @@
         </dependency>
 
         <dependency>
-            <groupId>com.xhzy.qa</groupId>
-            <artifactId>sports-common</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
-            <scope>compile</scope>
+            <groupId>com.opensource.grip</groupId>
+            <artifactId>api-test</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
         </dependency>
 
     </dependencies>
