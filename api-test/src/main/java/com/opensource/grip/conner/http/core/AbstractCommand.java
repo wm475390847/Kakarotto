@@ -79,7 +79,7 @@ public abstract class AbstractCommand {
      * @param okHttpClientBuilder okHttpClientBuilder
      */
     private void ignoreSsl(final OkHttpClient.Builder okHttpClientBuilder) {
-        logger.info("https请求忽略SSL证书");
+        logger.debug("https请求忽略SSL证书");
         SSLContext sslContext = null;
         try {
             sslContext = SSLContext.getInstance("SSL");
