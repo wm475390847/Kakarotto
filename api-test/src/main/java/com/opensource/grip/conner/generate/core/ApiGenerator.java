@@ -31,14 +31,17 @@ public class ApiGenerator extends BaseGenerator<ApiInfo> {
             ApiInfo apiInfo = list.get(i);
             String outputPath = ParseUtil.getOutputPath(getOutputPath());
             String packageName = ParseUtil.getPackageName(getOutputPath());
-            String className = ParseUtil.getClassName(apiInfo.getMethod(), apiInfo.getApiPath(), suffix);
+            String className = ParseUtil.getClassName(apiInfo.getApiPath(), apiInfo.getMethod(), suffix);
 
             //生成模版属性
             FtlParam ftlParam = initFtlParam(apiInfo, className, packageName);
 
             //生成自动生成属性
-            Structure structure = new Structure().setFtlParam(ftlParam).setClassName(className)
-                    .setOutputPath(outputPath).setFileSuffix(FileFormatEnum.JAVA.getSuffix());
+            Structure structure = new Structure()
+                    .setFtlParam(ftlParam)
+                    .setClassName(className)
+                    .setOutputPath(outputPath)
+                    .setFileSuffix(FileFormatEnum.JAVA.getSuffix());
 
             if (ftlParam.getApiPath() != null && ftlParam.getAttrs().size() != 0) {
                 logger.info("structure: {}", structure);
@@ -55,17 +58,16 @@ public class ApiGenerator extends BaseGenerator<ApiInfo> {
      * @return 模版属性
      */
     public FtlParam initFtlParam(ApiInfo apiInfo, String className, String packageName) {
-        FtlParam ftlParam = new FtlParam();
-        ftlParam.setMethod(apiInfo.getMethod());
-        ftlParam.setContentType(apiInfo.getContentType());
-        ftlParam.setApiName(apiInfo.getApiName());
-        ftlParam.setApiAuthor(apiInfo.getApiAuthor());
-        ftlParam.setApiPath(apiInfo.getApiPath());
-        ftlParam.setAttrs(apiInfo.getParam());
-        ftlParam.setClassName(className);
-        ftlParam.setPackagePath(packageName);
-        ftlParam.setDate(new Date().toString());
-        return ftlParam;
+        return new FtlParam()
+                .setMethod(apiInfo.getMethod())
+                .setContentType(apiInfo.getContentType())
+                .setApiName(apiInfo.getApiName())
+                .setApiAuthor(apiInfo.getApiAuthor())
+                .setApiPath(apiInfo.getApiPath())
+                .setAttrs(apiInfo.getParam())
+                .setClassName(className)
+                .setPackagePath(packageName)
+                .setDate(new Date().toString());
     }
 
     @Setter

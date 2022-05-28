@@ -12,7 +12,6 @@ import com.opensource.grip.conner.generate.enums.ValTypeEnum;
 import com.opensource.grip.conner.generate.util.StringUtil;
 import com.opensource.grip.conner.http.logger.ResponseInfo;
 import com.opensource.grip.conner.http.logger.ResponseLog;
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 
 import java.util.LinkedList;
@@ -25,7 +24,6 @@ import java.util.stream.Collectors;
  * @author wangmin
  * @date 2022/5/17 13:05
  */
-@Slf4j
 public class YApiParse extends BaseApiParse<ApiInfo> {
     private static final String SIGN = "/";
 
@@ -45,18 +43,28 @@ public class YApiParse extends BaseApiParse<ApiInfo> {
         JSONArray apiInfo = getApiInfo(projectId);
 
         String finalBasePath = basePath;
-        return apiInfo.stream().map(e -> (JSONObject) e)
-                .map(e -> splitData(projectId, e, finalBasePath)).collect(Collectors.toList());
+        return apiInfo.stream()
+                .map(e -> (JSONObject) e)
+                .map(e -> splitData(projectId, e, finalBasePath))
+                .collect(Collectors.toList());
     }
 
     private JSONArray getApiInfo(Integer projectId) {
         JSONArray array = new JSONArray();
-        ResponseLog<Response> responseLog = InterfaceListApi.builder().projectId(projectId).build().execute();
-        log.info(responseLog.toString());
+        ResponseLog<Response> responseLog = InterfaceListApi
+                .builder()
+                .projectId(projectId)
+                .build()
+                .execute();
+        logger.info(responseLog.toString());
         JSONObject data = responseLog.getObjResult().getJsonData();
         Integer total = data.getInteger("total");
         for (int i = 1; i <= total; i++) {
-            ResponseLog<Response> newLog = InterfaceListApi.builder().projectId(projectId).page(i).build().execute();
+            ResponseLog<Response> newLog = InterfaceListApi
+                    .builder()
+                    .projectId(projectId)
+                    .page(i).build()
+                    .execute();
             JSONArray list = newLog.getObjResult().getJsonData().getJSONArray("list");
             array.addAll(list);
         }
@@ -69,7 +77,13 @@ public class YApiParse extends BaseApiParse<ApiInfo> {
             Integer catId = object.getInteger("_id");
 
             // 接口详情
-            JSONObject data = InterfaceGetApi.builder().id(catId).build().execute().getObjResult().getJsonData();
+            JSONObject data = InterfaceGetApi
+                    .builder()
+                    .id(catId)
+                    .build()
+                    .execute()
+                    .getObjResult()
+                    .getJsonData();
 
             String path = data.getString("path");
             path = basePath == null ? path : basePath + path;
@@ -88,9 +102,12 @@ public class YApiParse extends BaseApiParse<ApiInfo> {
             String contentType;
             if (reqHeaders.size() != 0) {
                 // post请求的header是有东西的
-                JSONObject header = reqHeaders.stream().map(req -> (JSONObject) req)
+                JSONObject header = reqHeaders
+                        .stream()
+                        .map(req -> (JSONObject) req)
                         .filter(req -> "Content-Type".equals(req.getString("name")))
-                        .findFirst().orElse(null);
+                        .findFirst()
+                        .orElse(null);
                 Preconditions.checkArgument(header != null, "header 为空");
 
                 contentType = header.getString("value");
@@ -114,8 +131,15 @@ public class YApiParse extends BaseApiParse<ApiInfo> {
                 JSONArray reqParams = data.getJSONArray("req_params");
                 param = parseReqParams(reqParams);
             }
-            apiInfo.setProjectId(projectId).setCatId(catId).setApiPath(path).setApiName(title).setMethod(method)
-                    .setApiAuthor(username).setContentType(contentType).setIsCover(false).setParam(param);
+            apiInfo.setProjectId(projectId)
+                    .setCatId(catId)
+                    .setApiPath(path)
+                    .setApiName(title)
+                    .setMethod(method)
+                    .setApiAuthor(username)
+                    .setContentType(contentType)
+                    .setIsCover(false)
+                    .setParam(param);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -129,8 +153,12 @@ public class YApiParse extends BaseApiParse<ApiInfo> {
      * @return 路径
      */
     private String parseBasePath(Integer projectId) {
-        ResponseLog<Response> responseLog = ProjectGetApi.builder().projectId(projectId).build().execute();
-        ResponseInfo objResult = responseLog.getObjResult();
+        ResponseInfo objResult = ProjectGetApi
+                .builder()
+                .projectId(projectId)
+                .build()
+                .execute()
+                .getObjResult();
         Preconditions.checkArgument(!"请登录...".equals(objResult.getErrMsg()), "token 过期请设置");
         return objResult.getJsonData().getString("basepath");
     }

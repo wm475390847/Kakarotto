@@ -2,12 +2,12 @@ package com.opensource.grip.conner.http.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Preconditions;
-import okhttp3.Response;
 import com.opensource.grip.conner.http.config.Context;
 import com.opensource.grip.conner.http.config.HeadersConfig;
 import com.opensource.grip.conner.http.config.IConfig;
 import com.opensource.grip.conner.http.enums.MethodEnum;
 import com.opensource.grip.conner.http.logger.ResponseLog;
+import okhttp3.Response;
 
 import java.util.Map;
 

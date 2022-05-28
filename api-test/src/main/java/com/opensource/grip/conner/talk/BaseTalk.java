@@ -6,8 +6,9 @@ import com.opensource.grip.conner.http.enums.MethodEnum;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -15,8 +16,9 @@ import java.io.IOException;
  * @author wangmin
  * @date 2022/3/12 11:31 上午
  */
-@Slf4j
 public abstract class BaseTalk implements ITalk {
+
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final String webhook;
 
@@ -36,12 +38,12 @@ public abstract class BaseTalk implements ITalk {
                     .bodyContent(message())
                     .build();
             Response response = MethodEnum.POST.getCommand().execute(null, webhook, api);
-            log.info("==> 发送钉钉通知");
+            logger.info("==> 发送钉钉通知");
             if (response.body() != null) {
-                log.info("==> response: {}", response.body().string());
-                log.info("<== success");
+                logger.info("==> response: {}", response.body().string());
+                logger.info("<== success");
             } else {
-                log.info("<== fail");
+                logger.info("<== fail");
             }
         } catch (IOException e) {
             e.printStackTrace();

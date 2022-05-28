@@ -2,6 +2,8 @@ package com.opensource.grip.conner.generate.parse;
 
 import com.opensource.grip.conner.generate.pojo.Constant;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 抽象解析类
@@ -11,6 +13,8 @@ import lombok.Getter;
  */
 @Getter
 public abstract class BaseApiParse<T> implements IParse<T> {
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private final Object key;
     private final String basePath;
 

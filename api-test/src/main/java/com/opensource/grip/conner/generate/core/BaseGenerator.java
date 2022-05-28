@@ -59,13 +59,13 @@ public abstract class BaseGenerator<P> implements IGenerator {
                 try {
                     // step1 创建freeMarker配置实例
                     Configuration configuration = new Configuration(Configuration.VERSION_2_3_23);
-                    //step2 获取模版路径
+                    // step2 获取模版路径
                     configuration.setDirectoryForTemplateLoading(new File(templatePath));
-                    //step3 创建数据模型
+                    // step3 创建数据模型
                     Template template = configuration.getTemplate(templateName);
-                    //step4 加载模版文件
+                    // step4 加载模版文件
                     Map<String, Object> dataMap = value.initDataMap();
-                    //step5 生成数据
+                    // step5 生成数据
                     File docFile = new File(outputPath + value.getClassName() + FileFormatEnum.findBySuffix(value.getFileSuffix()).getSuffix());
                     String info = !docFile.exists() ? writerFile(template, dataMap, docFile) : "文件已存在 !";
                     logger.info("----------{}----------", info);
@@ -85,7 +85,7 @@ public abstract class BaseGenerator<P> implements IGenerator {
      * @return 输出结果
      */
     private String writerFile(Template template, Map<String, Object> dataMap, File docFile) throws TemplateException, IOException {
-        //增强try，应用与自动关闭资源，被自动关闭的资源必须实现Closeable或AutoCloseable接口
+        //增强try，自动关闭资源，被自动关闭的资源必须实现Closeable或AutoCloseable接口
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(docFile)))) {
             template.process(dataMap, writer);
         }

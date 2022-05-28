@@ -41,12 +41,14 @@ public class ParseUtil {
 
     /**
      * 获取类名
+     * <P>返回类名：pathMethodSuffix</P>
      *
      * @param apiPath   接口路径
+     * @param apiMethod 接口请求方式
      * @param apiSuffix 接口后缀
      * @return className
      */
-    public static String getClassName(String apiMethod, String apiPath, String apiSuffix) {
+    public static String getClassName(String apiPath, String apiMethod, String apiSuffix) {
         StringBuilder sb = new StringBuilder();
         String[] pathList = getPathList(apiPath);
         int length = pathList.length;
@@ -60,12 +62,19 @@ public class ParseUtil {
         return apiSuffix == null ? name : name + apiSuffix;
     }
 
+    /**
+     * 获取路径list
+     *
+     * @param apiPath 接口路径
+     * @return 接口路径集合
+     */
     private static String[] getPathList(String apiPath) {
         apiPath = apiPath.replaceAll("[{}]", "");
         apiPath = apiPath.startsWith("/") ? apiPath.replaceFirst("/", "") : apiPath;
         apiPath = apiPath.endsWith("/") ? apiPath.substring(0, apiPath.length() - 1) : apiPath;
         String[] pathList = apiPath.split("/");
-        return Arrays.stream(pathList).map(KeywordEnum::transferKeyword)
+        return Arrays.stream(pathList)
+                .map(KeywordEnum::transferKeyword)
                 .map(e -> StringUtil.lineToHump(e, true))
                 .toArray(String[]::new);
     }

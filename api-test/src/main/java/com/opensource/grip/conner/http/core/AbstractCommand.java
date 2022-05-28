@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2022/5/17 13:05
  */
 public abstract class AbstractCommand {
-    private static final Logger logger = LoggerFactory.getLogger(AbstractCommand.class);
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * 执行请求

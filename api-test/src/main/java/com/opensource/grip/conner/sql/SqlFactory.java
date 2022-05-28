@@ -42,7 +42,10 @@ public class SqlFactory {
     @Accessors(chain = true, fluent = true)
     public static class Builder {
 
-        private String configPath = "configuration.temp";
+        /**
+         * 配置自己的sqlConfiguration.xml
+         */
+        private String configPath = "template/configuration.xml";
 
         public SqlFactory build() {
             return new SqlFactory(this);
