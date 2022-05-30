@@ -82,7 +82,8 @@ public abstract class AbstractCommand {
 
         okHttpClientBuilder.retryOnConnectionFailure(true)
                 .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(3, TimeUnit.MINUTES);
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS);
 
         Response response = null;
         try {
