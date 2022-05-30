@@ -43,7 +43,6 @@ public abstract class AbstractCommand {
 
         Proxy proxy = null;
         if (config != null) {
-
             Map<String, String> requestHeaders = config.getRequestHeaders();
             if (!requestHeaders.isEmpty()) {
                 requestHeaders.forEach(builder::addHeader);
