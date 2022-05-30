@@ -1,5 +1,13 @@
 package com.opensource.grip.test;
 
+import com.opensource.grip.conner.http.api.Api;
+import com.opensource.grip.conner.http.config.HeadersConfig;
+import com.opensource.grip.conner.http.enums.MethodEnum;
+import com.opensource.grip.conner.talk.MarkdownTalk;
+import org.testng.annotations.Test;
+
+import java.io.IOException;
+
 /**
  * @author wangmin
  * @date 2022/5/17 11:28
@@ -25,5 +33,17 @@ public class TestObject {
 //                .build().load();
 //        generator.execute();
 //
+//    }
+
+//    @Test
+//    public void test() throws IOException {
+//        HeadersConfig headersConfig = new HeadersConfig();
+//        headersConfig.host("118.31.181.18")
+//                .cookie("_sw_token=EC04F49329B3E0CEF72561F89F56DE28");
+//        String url = "https://test.school.shuwen.com/ai-school-manager/school/classes/list";
+//        Api api = VenuesLitesApi.builder().stadiumId(13L).build().buildApi();
+//
+//        String string = MethodEnum.POST.getCommand().execute(headersConfig, url, api).body().string();
+//        System.err.println(string);
 //    }
 }

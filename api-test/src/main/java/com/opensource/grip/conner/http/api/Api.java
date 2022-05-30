@@ -22,9 +22,10 @@ public class Api {
     private final String contentType;
     private final boolean ignoreSsl;
     private final String method;
+    private final String baseUrl;
     private final String path;
     private final String host;
-    private final String ip;
+    private final Integer port;
 
     @Setter
     private Object bodyContent;
@@ -40,7 +41,8 @@ public class Api {
         this.method = builder.method;
         this.host = builder.host;
         this.path = builder.path;
-        this.ip = builder.ip;
+        this.baseUrl = builder.baseUrl;
+        this.port = builder.port;
     }
 
     public static class Builder {
@@ -52,9 +54,10 @@ public class Api {
         private boolean ignoreSsl = true;
         private Object bodyContent;
         private String method;
-        private String host;
         private String path;
-        private String ip;
+        private String baseUrl;
+        private String host;
+        private Integer port;
 
         public Builder headers(Map<String, String> headers) {
             this.headers.putAll(headers);
@@ -123,8 +126,13 @@ public class Api {
             return this;
         }
 
-        public Builder ip(String ip) {
-            this.ip = ip;
+        public Builder port(Integer port) {
+            this.port = port;
+            return this;
+        }
+
+        public Builder baseUrl(String baseUrl) {
+            this.baseUrl = baseUrl;
             return this;
         }
 

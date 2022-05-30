@@ -1,10 +1,9 @@
 package com.opensource.grip.conner.http.core;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.*;
 import com.opensource.grip.conner.http.api.Api;
 import com.opensource.grip.conner.http.config.HeadersConfig;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,10 +12,12 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
+import java.net.*;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -32,32 +33,61 @@ public abstract class AbstractCommand {
      * 执行请求
      * <p>传入公共头部配置&完整的url&每个接口的属性来调用一个http/https请求
      *
-     * @param headersConfig 头部配置类
-     * @param url           url
-     * @param api           Api类
+     * @param config 头部配置类
+     * @param url    url
+     * @param api    Api类
      * @return 响应体
      */
-    public Response execute(HeadersConfig headersConfig, String url, Api api) {
+    public Response execute(HeadersConfig config, String url, Api api) {
         Request.Builder builder = new Request.Builder();
-        if (headersConfig != null) {
-            headersConfig.getRequestHeaders().forEach(builder::addHeader);
+
+        Proxy proxy = null;
+        if (config != null) {
+
+            Map<String, String> requestHeaders = config.getRequestHeaders();
+            if (!requestHeaders.isEmpty()) {
+                requestHeaders.forEach(builder::addHeader);
+            }
+            // 从配置文件中获取hostIp
+            String hostIp = config.getHost();
+            if (StringUtils.isNotBlank(hostIp)) {
+                // 得到协议、host、端口
+                Request request = new Request.Builder().url(url).build();
+                String host = request.url().host();
+                String scheme = request.url().scheme();
+                int port = config.getPort() == null ? scheme.contains("http") ? 80 : 443 : config.getPort();
+                // 绑定url
+                InetAddress byAddress = null;
+                try {
+                    byAddress = InetAddress.getByAddress(host, ipParse(hostIp));
+                } catch (UnknownHostException e) {
+                    e.printStackTrace();
+                }
+                InetSocketAddress inetSocketAddress = new InetSocketAddress(byAddress, port);
+                proxy = new Proxy(Proxy.Type.HTTP, inetSocketAddress);
+            }
         }
+
         buildRequest(builder, api);
 
         Request request = builder.url(url).build();
+
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
         if (isHttps(url) && api.isIgnoreSsl()) {
             ignoreSsl(okHttpClientBuilder);
         }
 
-        OkHttpClient build = okHttpClientBuilder.retryOnConnectionFailure(true)
-                .connectTimeout(3, TimeUnit.MINUTES)
-                .readTimeout(3, TimeUnit.MINUTES)
-                .build();
+        if (proxy != null) {
+            okHttpClientBuilder.proxy(proxy);
+        }
+
+        okHttpClientBuilder.retryOnConnectionFailure(true)
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(3, TimeUnit.MINUTES);
 
         Response response = null;
         try {
-            response = build.newCall(request).execute();
+            response = okHttpClientBuilder.build().newCall(request).execute();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -117,5 +147,20 @@ public abstract class AbstractCommand {
      */
     private boolean isHttps(String url) {
         return url.contains("https://");
+    }
+
+    /**
+     * ip解析
+     *
+     * @param hostIp hostIp
+     * @return byte[]
+     */
+    private byte[] ipParse(String hostIp) {
+        String[] ipStr = hostIp.split("\\.");
+        byte[] ipBuf = new byte[4];
+        for (int i = 0; i < ipBuf.length; i++) {
+            ipBuf[i] = (byte) (Integer.parseInt(ipStr[i]) & 0xff);
+        }
+        return ipBuf;
     }
 }

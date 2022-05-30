@@ -29,21 +29,25 @@ public abstract class BaseHttpApi implements IApi<Response> {
 
     @Override
     public ResponseLog<Response> execute() {
-        ResponseLog<Response> log = new ResponseLog<>();
-
         Api api = buildApi();
-
         MethodEnum method = MethodEnum.findEnumByType(api.getMethod());
 
         HeadersConfig config = api.getHeaders().isEmpty() ? (HeadersConfig) getConfig()
                 : new HeadersConfig().setRequestHeaders(api.getHeaders());
 
-        String url = buildUrl(buildBaseUrl(config, api), api);
+        String url = buildFullUrl(config, api);
 
         long startTime = System.currentTimeMillis();
+
         Response response = method.getCommand().execute(config, url, api);
-        log.setConfig(config).setApi(api).setStartTime(startTime).setEndTime(System.currentTimeMillis())
-                .setResponse(response).setUrl(url);
+
+        ResponseLog<Response> log = new ResponseLog<>();
+        log.setEndTime(System.currentTimeMillis())
+                .setStartTime(startTime)
+                .setResponse(response)
+                .setConfig(config)
+                .setApi(api)
+                .setUrl(url);
         return log;
     }
 
@@ -142,20 +146,21 @@ public abstract class BaseHttpApi implements IApi<Response> {
     }
 
     /**
-     * 构建基础url
-     * <P>POST请求则为完整的url，GET请求则为?前面的url
+     * 构建完整url
+     * <P>构建POST、GET请求的完整url
      *
      * @param config 头部配置类
      * @param api    Api类
-     * @return url 基础的url
+     * @return url 完整的url
      */
-    private String buildBaseUrl(HeadersConfig config, Api api) {
+    private String buildFullUrl(HeadersConfig config, Api api) {
         Preconditions.checkNotNull(api, "api is null");
-        String hostName = api.getHost() == null ? config.getHost() : api.getHost();
+        String baseUrl = api.getBaseUrl() == null ? config.getBaseUrl() : api.getBaseUrl();
         String path = api.getPath();
-        StringBuilder sb = new StringBuilder(hostName);
+        StringBuilder sb = new StringBuilder(baseUrl);
+        // 组合成：http://xxx.xxx.xx/xxx/xxx
         if (path != null) {
-            if (!hostName.endsWith(SOLIDUS)) {
+            if (!baseUrl.endsWith(SOLIDUS)) {
                 sb.append(SOLIDUS);
             }
             if (path.startsWith(SOLIDUS)) {
@@ -163,26 +168,17 @@ public abstract class BaseHttpApi implements IApi<Response> {
             }
             sb.append(path);
         }
-        return sb.toString();
-    }
 
-    /**
-     * 构建完整url
-     *
-     * @param bashUrl 基础的url
-     * @param api     Api类
-     * @return 完整的url
-     */
-    private String buildUrl(String bashUrl, Api api) {
+        // 组合成：http://xxx.xxx.xx/xxx/xxx?xxx=11&sss=111
         Map<String, String> urlParams = api.getUrlParams();
         if (urlParams.isEmpty()) {
-            return bashUrl;
+            return sb.toString();
         }
-        StringBuilder sb = new StringBuilder();
-        urlParams.forEach((key, value) -> sb.append(key).append("=").append(value).append(WITH));
-        if (sb.toString().endsWith(WITH)) {
-            sb.replace(sb.length() - 1, sb.length(), "");
+        StringBuilder pathSb = new StringBuilder();
+        urlParams.forEach((key, value) -> pathSb.append(key).append("=").append(value).append(WITH));
+        if (pathSb.toString().endsWith(WITH)) {
+            pathSb.replace(pathSb.length() - 1, pathSb.length(), "");
         }
-        return bashUrl + "?" + sb;
+        return sb + "?" + pathSb;
     }
 }

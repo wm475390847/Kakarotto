@@ -18,8 +18,9 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 public class HeadersConfig extends AbstractConfig {
 
+    private String baseUrl;
     private String host;
-    private String ip;
+    private Integer port;
     private Map<String, String> requestHeaders = new HashMap<>();
 
     /**
@@ -79,6 +80,17 @@ public class HeadersConfig extends AbstractConfig {
     }
 
     /**
+     * 设置基础的url
+     *
+     * @param baseUrl host的名字
+     * @return HeadersConfig
+     */
+    public HeadersConfig baseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+        return this;
+    }
+
+    /**
      * 设置host
      *
      * @param host host
@@ -92,11 +104,11 @@ public class HeadersConfig extends AbstractConfig {
     /**
      * 设置ip
      *
-     * @param ip ip
+     * @param port ip
      * @return HeadersConfig
      */
-    public HeadersConfig ip(String ip) {
-        this.ip = ip;
+    public HeadersConfig port(Integer port) {
+        this.port = port;
         return this;
     }
 }
