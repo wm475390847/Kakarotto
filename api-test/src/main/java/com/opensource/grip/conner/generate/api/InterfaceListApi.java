@@ -23,6 +23,7 @@ public class InterfaceListApi extends BaseHttpApi {
     @Override
     protected Api buildApi() {
         return new Api.Builder()
+                .baseUrl(Constant.BASE_URL)
                 .host(Constant.HOST)
                 .header("Cookie", Constant.TOKEN)
                 .path("/api/interface/list")

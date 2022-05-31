@@ -9,4 +9,5 @@ public class Constant {
 
     public static String TOKEN = null;
     public static String HOST = null;
+    public static String BASE_URL = null;
 }

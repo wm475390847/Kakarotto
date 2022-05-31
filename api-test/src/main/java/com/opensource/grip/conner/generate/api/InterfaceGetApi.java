@@ -19,6 +19,7 @@ public class InterfaceGetApi extends BaseHttpApi {
     @Override
     protected Api buildApi() {
         return new Api.Builder()
+                .baseUrl(Constant.BASE_URL)
                 .host(Constant.HOST)
                 .header("Cookie", Constant.TOKEN)
                 .urlParam("id", id)
