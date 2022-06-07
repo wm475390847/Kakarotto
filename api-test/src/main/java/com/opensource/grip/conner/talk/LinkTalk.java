@@ -28,7 +28,7 @@ public class LinkTalk extends BaseTalk {
         JSONObject link = new JSONObject();
         link.put("text", text);
         link.put("title", getKeyword());
-        link.put("picurl", picUrl);
+        link.put("picUrl", picUrl);
         link.put("messageUrl", messageUrl);
         object.put("link", link);
         return object;
