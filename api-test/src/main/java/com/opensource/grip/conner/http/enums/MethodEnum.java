@@ -35,6 +35,11 @@ public enum MethodEnum {
      * put请求
      */
     PUT("PUT", new PutCommand()),
+
+    /**
+     * multipart请求
+     */
+    MULTIPART("multipart", new MultipartCommand()),
     ;
 
     MethodEnum(String methodType, AbstractCommand command) {

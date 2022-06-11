@@ -63,7 +63,8 @@ public class YApiParse extends BaseApiParse<ApiInfo> {
             ResponseLog<Response> newLog = InterfaceListApi
                     .builder()
                     .projectId(projectId)
-                    .page(i).build()
+                    .page(i)
+                    .build()
                     .execute();
             JSONArray list = newLog.getObjResult().getJsonData().getJSONArray("list");
             array.addAll(list);
