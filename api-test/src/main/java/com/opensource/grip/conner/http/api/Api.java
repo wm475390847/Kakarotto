@@ -1,5 +1,6 @@
 package com.opensource.grip.conner.http.api;
 
+import com.opensource.grip.conner.http.enums.MethodEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,6 +27,7 @@ public class Api {
     private final String contentType;
     private final boolean ignoreSsl;
     private final String method;
+    private final MethodEnum methodEnum;
     private final String baseUrl;
     private final String path;
     private final String host;
@@ -43,6 +45,7 @@ public class Api {
         this.bodyContent = builder.bodyContent;
         this.ignoreSsl = builder.ignoreSsl;
         this.method = builder.method;
+        this.methodEnum = builder.methodEnum;
         this.host = builder.host;
         this.path = builder.path;
         this.baseUrl = builder.baseUrl;
@@ -66,6 +69,7 @@ public class Api {
         private String contentType = "application/json";
         private boolean ignoreSsl = true;
         private Object bodyContent;
+        private MethodEnum methodEnum;
         private String method;
         private String path;
         private String baseUrl;
@@ -126,6 +130,11 @@ public class Api {
 
         public Builder method(String method) {
             this.method = method;
+            return this;
+        }
+
+        public Builder method(MethodEnum methodEnum) {
+            this.methodEnum = methodEnum;
             return this;
         }
 
