@@ -65,6 +65,11 @@ public abstract class AbstractCommand {
                 InetSocketAddress inetSocketAddress = new InetSocketAddress(byAddress, port);
                 proxy = new Proxy(Proxy.Type.HTTP, inetSocketAddress);
             }
+        } else {
+            Map<String, String> requestHeaders = api.getHeaders();
+            if (!requestHeaders.isEmpty()) {
+                requestHeaders.forEach(builder::addHeader);
+            }
         }
 
         buildRequest(builder, api);

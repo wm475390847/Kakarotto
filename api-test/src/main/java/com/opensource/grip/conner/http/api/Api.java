@@ -15,6 +15,10 @@ import java.util.Map;
  */
 @Getter
 public class Api {
+
+    private static final String SOLIDUS = "/";
+    private static final String WITH = "&";
+
     private final Map<String, String> partParams = new HashMap<>();
     private final Map<String, String> urlParams = new HashMap<>();
     private final Map<String, String> partFiles = new HashMap<>();
@@ -43,6 +47,15 @@ public class Api {
         this.path = builder.path;
         this.baseUrl = builder.baseUrl;
         this.port = builder.port;
+    }
+
+    /**
+     * 返回完整的url
+     *
+     * @return url
+     */
+    public String getUrl() {
+        return buildFullUrl();
     }
 
     public static class Builder {
@@ -139,5 +152,37 @@ public class Api {
         public Api build() {
             return new Api(this);
         }
+    }
+
+    /**
+     * 构建完整url
+     * <P>构建POST、GET请求的完整url
+     *
+     * @return url 完整的url
+     */
+    private String buildFullUrl() {
+        StringBuilder sb = new StringBuilder(baseUrl);
+        // 组合成：http://xxx.xxx.xx/xxx/xxx
+        String newPath = path;
+        if (newPath != null) {
+            if (!baseUrl.endsWith(SOLIDUS)) {
+                sb.append(SOLIDUS);
+            }
+            if (newPath.startsWith(SOLIDUS)) {
+                newPath = newPath.replaceFirst(SOLIDUS, "");
+            }
+            sb.append(newPath);
+        }
+
+        // 组合成：http://xxx.xxx.xx/xxx/xxx?xxx=11&sss=111
+        if (urlParams.isEmpty()) {
+            return sb.toString();
+        }
+        StringBuilder pathSb = new StringBuilder();
+        urlParams.forEach((key, value) -> pathSb.append(key).append("=").append(value).append(WITH));
+        if (pathSb.toString().endsWith(WITH)) {
+            pathSb.replace(pathSb.length() - 1, pathSb.length(), "");
+        }
+        return sb + "?" + pathSb;
     }
 }
