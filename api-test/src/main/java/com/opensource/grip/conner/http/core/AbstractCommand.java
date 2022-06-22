@@ -3,7 +3,6 @@ package com.opensource.grip.conner.http.core;
 import okhttp3.*;
 import com.opensource.grip.conner.http.api.Api;
 import com.opensource.grip.conner.http.config.HeadersConfig;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,39 +40,12 @@ public abstract class AbstractCommand {
     public Response execute(HeadersConfig config, String url, Api api) {
         Request.Builder builder = new Request.Builder();
 
-        Proxy proxy = null;
-        if (config != null) {
-            Map<String, String> requestHeaders = config.getRequestHeaders();
-            if (!requestHeaders.isEmpty()) {
-                requestHeaders.forEach(builder::addHeader);
-            }
-            // 从配置文件中获取hostIp
-            String hostIp = config.getHost();
-            if (StringUtils.isNotBlank(hostIp)) {
-                // 得到协议、host、端口
-                Request request = new Request.Builder().url(url).build();
-                String host = request.url().host();
-                String scheme = request.url().scheme();
-                int port = config.getPort() == null ? scheme.contains("http") ? 80 : 443 : config.getPort();
-                // 绑定url
-                InetAddress byAddress = null;
-                try {
-                    byAddress = InetAddress.getByAddress(host, ipParse(hostIp));
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                }
-                InetSocketAddress inetSocketAddress = new InetSocketAddress(byAddress, port);
-                proxy = new Proxy(Proxy.Type.HTTP, inetSocketAddress);
-            }
-        } else {
-            Map<String, String> requestHeaders = api.getHeaders();
-            if (!requestHeaders.isEmpty()) {
-                requestHeaders.forEach(builder::addHeader);
-            }
+        Map<String, String> headers = config == null ? api.getHeaders() : config.getRequestHeaders();
+        if (!headers.isEmpty()) {
+            headers.forEach(builder::addHeader);
         }
 
         buildRequest(builder, api);
-
         Request request = builder.url(url).build();
 
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
@@ -81,6 +53,9 @@ public abstract class AbstractCommand {
             ignoreSsl(okHttpClientBuilder);
         }
 
+        String host = config == null ? api.getHost() : config.getHost();
+        Integer port = config == null ? api.getPort() : config.getPort();
+        Proxy proxy = getProxy(url, host, port);
         if (proxy != null) {
             okHttpClientBuilder.proxy(proxy);
         }
@@ -155,13 +130,41 @@ public abstract class AbstractCommand {
     }
 
     /**
+     * 获取代理
+     *
+     * @param url  请求url
+     * @param host host
+     * @param port 端口号
+     * @return 代理类
+     */
+    private Proxy getProxy(String url, String host, Integer port) {
+        if (host == null) {
+            return null;
+        }
+        // 得到协议、host、端口
+        Request request = new Request.Builder().url(url).build();
+        String hostName = request.url().host();
+        String scheme = request.url().scheme();
+        port = port == null ? scheme.contains("http") ? 80 : 443 : port;
+        // 绑定url
+        InetAddress byAddress = null;
+        try {
+            byAddress = InetAddress.getByAddress(hostName, ipParse(host));
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        InetSocketAddress inetSocketAddress = new InetSocketAddress(byAddress, port);
+        return new Proxy(Proxy.Type.HTTP, inetSocketAddress);
+    }
+
+    /**
      * ip解析
      *
-     * @param hostIp hostIp
+     * @param host host 127.0.0.1
      * @return byte[]
      */
-    private byte[] ipParse(String hostIp) {
-        String[] ipStr = hostIp.split("\\.");
+    private byte[] ipParse(String host) {
+        String[] ipStr = host.split("\\.");
         byte[] ipBuf = new byte[4];
         for (int i = 0; i < ipBuf.length; i++) {
             ipBuf[i] = (byte) (Integer.parseInt(ipStr[i]) & 0xff);
