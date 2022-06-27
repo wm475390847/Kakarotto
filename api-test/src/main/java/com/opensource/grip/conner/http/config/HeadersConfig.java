@@ -21,6 +21,7 @@ public class HeadersConfig extends AbstractConfig {
     private String baseUrl;
     private String host;
     private Integer port;
+    private String sign;
     private Map<String, String> requestHeaders = new HashMap<>();
 
     /**
@@ -109,6 +110,17 @@ public class HeadersConfig extends AbstractConfig {
      */
     public HeadersConfig port(Integer port) {
         this.port = port;
+        return this;
+    }
+
+    /**
+     * 加签验证，常接于url后面
+     *
+     * @param sign 标签
+     * @return HeadersConfig
+     */
+    public HeadersConfig sign(String sign) {
+        this.sign = sign;
         return this;
     }
 }

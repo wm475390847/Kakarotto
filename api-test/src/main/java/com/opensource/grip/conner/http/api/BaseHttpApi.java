@@ -157,6 +157,7 @@ public abstract class BaseHttpApi implements IApi<Response> {
         Preconditions.checkNotNull(api, "api is null");
         String baseUrl = api.getBaseUrl() == null ? config.getBaseUrl() : api.getBaseUrl();
         String path = api.getPath();
+        String sign = config == null ? api.getSign() : config.getSign();
         StringBuilder sb = new StringBuilder(baseUrl);
         // 组合成：http://xxx.xxx.xx/xxx/xxx
         if (path != null) {
@@ -179,6 +180,7 @@ public abstract class BaseHttpApi implements IApi<Response> {
         if (pathSb.toString().endsWith(WITH)) {
             pathSb.replace(pathSb.length() - 1, pathSb.length(), "");
         }
-        return sb + "?" + pathSb;
+        String url = sb + "?" + pathSb;
+        return sign == null ? url : url + "&" + sign;
     }
 }

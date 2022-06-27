@@ -31,6 +31,7 @@ public class Api {
     private final String baseUrl;
     private final String path;
     private final String host;
+    private final String sign;
     private final Integer port;
 
     @Setter
@@ -50,6 +51,7 @@ public class Api {
         this.path = builder.path;
         this.baseUrl = builder.baseUrl;
         this.port = builder.port;
+        this.sign = builder.sign;
     }
 
     /**
@@ -75,6 +77,7 @@ public class Api {
         private String baseUrl;
         private String host;
         private Integer port;
+        private String sign;
 
         public Builder headers(Map<String, String> headers) {
             this.headers.putAll(headers);
@@ -158,6 +161,11 @@ public class Api {
             return this;
         }
 
+        public Builder sign(String sign) {
+            this.sign = sign;
+            return this;
+        }
+
         public Api build() {
             return new Api(this);
         }
@@ -192,6 +200,7 @@ public class Api {
         if (pathSb.toString().endsWith(WITH)) {
             pathSb.replace(pathSb.length() - 1, pathSb.length(), "");
         }
-        return sb + "?" + pathSb;
+        String url = sb + "?" + pathSb;
+        return sign == null ? url : url + "&" + sign;
     }
 }
