@@ -173,7 +173,7 @@ public abstract class BaseHttpApi implements IApi<Response> {
         // 组合成：http://xxx.xxx.xx/xxx/xxx?xxx=11&sss=111
         Map<String, String> urlParams = api.getUrlParams();
         if (urlParams.isEmpty()) {
-            return sb.toString();
+            return sb + "?" + sign;
         }
         StringBuilder pathSb = new StringBuilder();
         urlParams.forEach((key, value) -> pathSb.append(key).append("=").append(value).append(WITH));
