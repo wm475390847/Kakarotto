@@ -35,10 +35,11 @@ public abstract class BaseTalk implements ITalk {
         try {
             Api api = new Api.Builder()
                     .contentType("application/json")
-                    .bodyContent(message())
+                    .requestBody(message())
                     .method(MethodEnum.POST)
+                    .url(webhook)
                     .build();
-            Response response = api.getMethodEnum().getCommand().execute(null, webhook, api);
+            Response response = api.getMethodEnum().getCommand().execute(api);
             logger.info("==> 发送钉钉通知");
             if (response.body() != null) {
                 logger.info("==> response: {}", response.body().string());

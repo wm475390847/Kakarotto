@@ -19,7 +19,7 @@ public class UicLoginApi extends BaseHttpApi {
     @Override
     protected Api buildApi() {
         return new Api.Builder()
-                .bodyContent(getCurrentBody())
+                .requestBody(getCurrentBody())
                 .baseUrl("https://test.account.shuwen.com")
                 .path("/api/uic/login/pw")
                 .method("POST")

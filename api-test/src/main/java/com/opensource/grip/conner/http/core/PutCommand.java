@@ -17,7 +17,7 @@ public class PutCommand extends AbstractCommand {
         MediaType mediaType = MediaType.parse(api.getContentType());
 
         // 发起put请求
-        Object bodyContent = api.getBodyContent();
+        Object bodyContent = api.getRequestBody();
         RequestBody requestBody = bodyContent == null ? RequestBody.create(mediaType, new byte[0])
                 : RequestBody.create(mediaType, bodyContent.toString());
         builder.put(requestBody);

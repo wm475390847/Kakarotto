@@ -1,15 +1,11 @@
 package com.opensource.grip.conner.http.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.base.Preconditions;
 import com.opensource.grip.conner.http.config.Context;
 import com.opensource.grip.conner.http.config.HeadersConfig;
 import com.opensource.grip.conner.http.config.IConfig;
-import com.opensource.grip.conner.http.enums.MethodEnum;
 import com.opensource.grip.conner.http.logger.ResponseLog;
 import okhttp3.Response;
-
-import java.util.Map;
 
 /**
  * 调用http请求的基类
@@ -19,9 +15,6 @@ import java.util.Map;
  */
 public abstract class BaseHttpApi implements IApi<Response> {
 
-    private static final String SOLIDUS = "/";
-    private static final String WITH = "&";
-
     /**
      * 当前请求体
      */
@@ -30,24 +23,17 @@ public abstract class BaseHttpApi implements IApi<Response> {
     @Override
     public ResponseLog<Response> execute() {
         Api api = buildApi();
-        MethodEnum method = MethodEnum.findEnumByType(api.getMethod());
+        api.setHeaderConfig((HeadersConfig) getConfig());
 
-        HeadersConfig config = api.getHeaders().isEmpty() ? (HeadersConfig) getConfig()
-                : new HeadersConfig().setRequestHeaders(api.getHeaders());
-
-        String url = buildFullUrl(config, api);
+        Response response = api.getMethodEnum().getCommand().execute(api);
 
         long startTime = System.currentTimeMillis();
-
-        Response response = method.getCommand().execute(config, url, api);
 
         ResponseLog<Response> log = new ResponseLog<>();
         log.setEndTime(System.currentTimeMillis())
                 .setStartTime(startTime)
                 .setResponse(response)
-                .setConfig(config)
-                .setApi(api)
-                .setUrl(url);
+                .setApi(api);
         return log;
     }
 
@@ -143,44 +129,5 @@ public abstract class BaseHttpApi implements IApi<Response> {
      */
     protected Object getCurrentBody() {
         return currentBody == null ? buildBody() : currentBody;
-    }
-
-    /**
-     * 构建完整url
-     * <P>构建POST、GET请求的完整url
-     *
-     * @param config 头部配置类
-     * @param api    Api类
-     * @return url 完整的url
-     */
-    private String buildFullUrl(HeadersConfig config, Api api) {
-        Preconditions.checkNotNull(api, "api is null");
-        String baseUrl = api.getBaseUrl() == null ? config.getBaseUrl() : api.getBaseUrl();
-        String path = api.getPath();
-        String sign = config == null ? api.getSign() : config.getSign();
-        StringBuilder sb = new StringBuilder(baseUrl);
-        // 组合成：http://xxx.xxx.xx/xxx/xxx
-        if (path != null) {
-            if (!baseUrl.endsWith(SOLIDUS)) {
-                sb.append(SOLIDUS);
-            }
-            if (path.startsWith(SOLIDUS)) {
-                path = path.replaceFirst(SOLIDUS, "");
-            }
-            sb.append(path);
-        }
-
-        // 组合成：http://xxx.xxx.xx/xxx/xxx?xxx=11&sss=111
-        Map<String, String> urlParams = api.getUrlParams();
-        if (urlParams.isEmpty()) {
-            return sb + "?" + sign;
-        }
-        StringBuilder pathSb = new StringBuilder();
-        urlParams.forEach((key, value) -> pathSb.append(key).append("=").append(value).append(WITH));
-        if (pathSb.toString().endsWith(WITH)) {
-            pathSb.replace(pathSb.length() - 1, pathSb.length(), "");
-        }
-        String url = sb + "?" + pathSb;
-        return sign == null ? url : url + "&" + sign;
     }
 }

@@ -2,7 +2,6 @@ package com.opensource.grip.conner.http.core;
 
 import okhttp3.*;
 import com.opensource.grip.conner.http.api.Api;
-import com.opensource.grip.conner.http.config.HeadersConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +15,6 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -32,20 +30,16 @@ public abstract class AbstractCommand {
      * 执行请求
      * <p>传入公共头部配置&完整的url&每个接口的属性来调用一个http/https请求
      *
-     * @param config 头部配置类
-     * @param url    url
-     * @param api    Api类
+     * @param api Api类
      * @return 响应体
      */
-    public Response execute(HeadersConfig config, String url, Api api) {
+    public Response execute(Api api) {
+        String url = api.getUrl();
+
         Request.Builder builder = new Request.Builder();
 
-        Map<String, String> headers = config == null ? api.getHeaders() : config.getRequestHeaders();
-        if (!headers.isEmpty()) {
-            headers.forEach(builder::addHeader);
-        }
-
         buildRequest(builder, api);
+
         Request request = builder.url(url).build();
 
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
@@ -53,9 +47,7 @@ public abstract class AbstractCommand {
             ignoreSsl(okHttpClientBuilder);
         }
 
-        String host = config == null ? api.getHost() : config.getHost();
-        Integer port = config == null ? api.getPort() : config.getPort();
-        Proxy proxy = getProxy(url, host, port);
+        Proxy proxy = getProxy(url, api);
         if (proxy != null) {
             okHttpClientBuilder.proxy(proxy);
         }
@@ -132,19 +124,19 @@ public abstract class AbstractCommand {
     /**
      * 获取代理
      *
-     * @param url  请求url
-     * @param host host
-     * @param port 端口号
+     * @param url 请求url
      * @return 代理类
      */
-    private Proxy getProxy(String url, String host, Integer port) {
-        if (host == null) {
+    private Proxy getProxy(String url, Api api) {
+        String host = api.getHost();
+        if (api.getHost() == null) {
             return null;
         }
         // 得到协议、host、端口
         Request request = new Request.Builder().url(url).build();
         String hostName = request.url().host();
         String scheme = request.url().scheme();
+        Integer port = api.getPort();
         port = port == null ? scheme.contains("http") ? 80 : 443 : port;
         // 绑定url
         InetAddress byAddress = null;

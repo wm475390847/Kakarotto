@@ -20,6 +20,7 @@ public class TestObject {
 
     @Test
     public void test() throws IOException {
+//        new MarkdownTalk.Builder().text("sssss").webhook("https://oapi.dingtalk.com/robot/send?access_token=02cccc359c45b0fb4913d1f4cbe4354f51a679be711c969c8969c7adb57cc937").keyword("小钉").build().send();
 //        ResponseLog<Response> responseLog = UicLoginApi.builder().account("18368126197@xhzy-ty").password("Aa563603").build().execute();
 //        System.err.println(responseLog.toString());
 //

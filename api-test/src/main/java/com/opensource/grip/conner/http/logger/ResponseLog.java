@@ -2,7 +2,6 @@ package com.opensource.grip.conner.http.logger;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Preconditions;
-import com.opensource.grip.conner.http.config.HeadersConfig;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import okhttp3.Response;
@@ -82,16 +81,16 @@ public class ResponseLog<T> {
         StringBuilder sb = new StringBuilder();
         sb.append("Api Request Log:").append(SYSTEM_LINE_SEPARATOR)
                 .append(BLANK).append("-headers: ")
-                .append(config == null ? api.getHeaders() : config.getRequestHeaders())
+                .append(api.getHeaders())
                 .append(SYSTEM_LINE_SEPARATOR)
                 .append(BLANK).append("-method: ").append(api.getMethod()).append(SYSTEM_LINE_SEPARATOR)
-                .append(BLANK).append("-url: ").append(url).append(SYSTEM_LINE_SEPARATOR);
+                .append(BLANK).append("-url: ").append(api.getUrl()).append(SYSTEM_LINE_SEPARATOR);
 
         //param
         if (!api.getPartParams().isEmpty()) {
             sb.append(BLANK).append("-partParam: ").append(api.getPartParams()).append(SYSTEM_LINE_SEPARATOR);
-        } else if (api.getBodyContent() != null) {
-            sb.append(BLANK).append("-body: ").append(api.getBodyContent()).append(SYSTEM_LINE_SEPARATOR);
+        } else if (api.getRequestBody() != null) {
+            sb.append(BLANK).append("-body: ").append(api.getRequestBody()).append(SYSTEM_LINE_SEPARATOR);
         } else if (!api.getUrlParams().isEmpty()) {
             sb.append(BLANK).append("-param: ");
             api.getUrlParams().forEach((key, value) -> sb.append(key).append("=").append(value).append("&"));
@@ -104,11 +103,9 @@ public class ResponseLog<T> {
         return sb.toString();
     }
 
-    private HeadersConfig config;
     private String strResult;
     private long startTime;
     private long endTime;
     private T response;
-    private String url;
     private Api api;
 }

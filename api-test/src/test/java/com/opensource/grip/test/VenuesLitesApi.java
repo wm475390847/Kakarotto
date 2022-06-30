@@ -36,7 +36,7 @@ public class VenuesLitesApi extends BaseHttpApi {
         return new Api.Builder()
                 .path("/stadium-manager/vlog/venues/lists")
                 .method("POST")
-                .bodyContent(getCurrentBody())
+                .requestBody(getCurrentBody())
                 .build();
     }
 
