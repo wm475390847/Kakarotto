@@ -83,7 +83,7 @@ public class ResponseLog<T> {
                 .append(BLANK).append("-headers: ")
                 .append(api.getHeaders())
                 .append(SYSTEM_LINE_SEPARATOR)
-                .append(BLANK).append("-method: ").append(api.getMethod()).append(SYSTEM_LINE_SEPARATOR)
+                .append(BLANK).append("-method: ").append(api.getMethodEnum().name()).append(SYSTEM_LINE_SEPARATOR)
                 .append(BLANK).append("-url: ").append(api.getUrl()).append(SYSTEM_LINE_SEPARATOR);
 
         //param

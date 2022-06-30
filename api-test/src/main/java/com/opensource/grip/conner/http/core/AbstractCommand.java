@@ -38,6 +38,8 @@ public abstract class AbstractCommand {
 
         Request.Builder builder = new Request.Builder();
 
+        api.getHeaders().forEach(builder::header);
+
         buildRequest(builder, api);
 
         Request request = builder.url(url).build();

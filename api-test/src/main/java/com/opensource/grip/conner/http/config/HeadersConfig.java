@@ -121,7 +121,7 @@ public class HeadersConfig extends AbstractConfig {
      * @return HeadersConfig
      */
     public HeadersConfig sign(String ak, String sk) {
-        this.sign.put(ak, sk);
+        sign.put(ak, sk);
         return this;
     }
 }

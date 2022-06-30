@@ -4,6 +4,7 @@ import com.opensource.grip.conner.http.config.HeadersConfig;
 import com.opensource.grip.conner.http.enums.MethodEnum;
 import com.shuwen.openapi.gateway.util.SignHelperV2;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +28,7 @@ public class Api {
     private final Map<String, String> sign = new HashMap<>();
     private final String contentType;
     private final boolean ignoreSsl;
+    private final boolean isSign;
     private final MethodEnum methodEnum;
     private final String path;
     private final String method;
@@ -43,6 +45,7 @@ public class Api {
         this.partFiles.putAll(builder.partFiles);
         this.headers.putAll(builder.headers);
         this.sign.putAll(builder.sign);
+        this.isSign = builder.isSign;
         this.contentType = builder.contentType;
         this.requestBody = builder.requestBody;
         this.methodEnum = builder.methodEnum;
@@ -62,20 +65,25 @@ public class Api {
      */
     public void setHeaderConfig(HeadersConfig config) {
         if (config != null) {
-            if (config.getHost() != null) {
+            // 如果config中host不为空并且api中host为空则使用config中的host，否则使用api中的host
+            if (config.getHost() != null && StringUtils.isEmpty(host)) {
                 this.host = config.getHost();
             }
-            if (config.getBaseUrl() != null) {
+            // 如果config中基础url不为空并且api中基础url为空则使用config中的基础url，否则使用api中的基础url
+            if (config.getBaseUrl() != null && StringUtils.isEmpty(baseUrl)) {
                 this.baseUrl = config.getBaseUrl();
             }
-            if (config.getPort() != null) {
+            // 如果config中port不为空并且api中port为空则使用config中的port，否则使用api中的port
+            if (config.getPort() != null && port == null) {
                 this.port = config.getPort();
             }
+            // 如果config中的加签参数不为空并且api中允许加签则进行加签处理，否则不加签
+            if (!config.getSign().isEmpty() && isSign) {
+                this.sign.putAll(config.getSign());
+            }
+
             if (!config.getRequestHeaders().isEmpty()) {
                 this.headers.putAll(config.getRequestHeaders());
-            }
-            if (!config.getSign().isEmpty()) {
-                this.sign.putAll(config.getSign());
             }
         }
     }
@@ -164,6 +172,7 @@ public class Api {
         private final Map<String, String> sign = new HashMap<>();
         private String contentType = "application/json";
         private boolean ignoreSsl = true;
+        private boolean isSign = true;
         private Object requestBody;
         private MethodEnum methodEnum;
         private String method;
@@ -227,6 +236,11 @@ public class Api {
 
         public Builder ignoreSsl(boolean ignoreSsl) {
             this.ignoreSsl = ignoreSsl;
+            return this;
+        }
+
+        public Builder isSign(boolean isSign) {
+            this.isSign = isSign;
             return this;
         }
 
