@@ -2,6 +2,7 @@ package com.opensource.grip.conner.http.api;
 
 import com.opensource.grip.conner.http.config.HeadersConfig;
 import com.opensource.grip.conner.http.enums.MethodEnum;
+import com.shuwen.openapi.gateway.util.SignHelperV2;
 import lombok.Getter;
 
 import java.util.HashMap;
@@ -23,12 +24,12 @@ public class Api {
     private final Map<String, String> urlParams = new HashMap<>();
     private final Map<String, String> partFiles = new HashMap<>();
     private final Map<String, String> headers = new HashMap<>();
+    private final Map<String, String> sign = new HashMap<>();
     private final String contentType;
     private final boolean ignoreSsl;
     private final MethodEnum methodEnum;
     private final String path;
     private final String method;
-    private final String sign;
     private final String url;
 
     private String host;
@@ -41,6 +42,7 @@ public class Api {
         this.urlParams.putAll(builder.urlParams);
         this.partFiles.putAll(builder.partFiles);
         this.headers.putAll(builder.headers);
+        this.sign.putAll(builder.sign);
         this.contentType = builder.contentType;
         this.requestBody = builder.requestBody;
         this.methodEnum = builder.methodEnum;
@@ -51,7 +53,6 @@ public class Api {
         this.host = builder.host;
         this.path = builder.path;
         this.port = builder.port;
-        this.sign = builder.sign;
     }
 
     /**
@@ -72,6 +73,9 @@ public class Api {
             }
             if (!config.getRequestHeaders().isEmpty()) {
                 this.headers.putAll(config.getRequestHeaders());
+            }
+            if (!config.getSign().isEmpty()) {
+                this.sign.putAll(config.getSign());
             }
         }
     }
@@ -116,14 +120,40 @@ public class Api {
 
         // 组合成：http://xxx.xxx.xx/xxx/xxx?xxx=11&sss=111
         if (urlParams.isEmpty()) {
-            return sb.toString();
+            if (!sign.isEmpty()) {
+                String signUrl = addSign(sign, null);
+                return sb + "?" + signUrl;
+            } else {
+                return sb.toString();
+            }
         }
-        StringBuilder pathSb = new StringBuilder();
-        urlParams.forEach((key, value) -> pathSb.append(key).append("=").append(value).append(WITH));
-        if (pathSb.toString().endsWith(WITH)) {
-            pathSb.replace(pathSb.length() - 1, pathSb.length(), "");
+
+        if (!sign.isEmpty()) {
+            String signUrl = addSign(sign, urlParams);
+            return sb + "?" + signUrl;
+        } else {
+            StringBuilder pathSb = new StringBuilder();
+            urlParams.forEach((key, value) -> pathSb.append(key).append("=").append(value).append(WITH));
+            if (pathSb.toString().endsWith(WITH)) {
+                pathSb.replace(pathSb.length() - 1, pathSb.length(), "");
+            }
+            return sb + "?" + pathSb;
         }
-        return sb + "?" + pathSb;
+    }
+
+    /**
+     * 加签
+     *
+     * @param sign 鉴权内容
+     * @param map  get的请求参数
+     * @return 加签后的url
+     */
+    private String addSign(Map<String, String> sign, Map<String, String> map) {
+        String signUrl = null;
+        for (Map.Entry<String, String> entry : sign.entrySet()) {
+            signUrl = SignHelperV2.getSignUrl(entry.getKey(), entry.getValue(), map);
+        }
+        return signUrl;
     }
 
     public static class Builder {
@@ -131,6 +161,7 @@ public class Api {
         private final Map<String, String> urlParams = new HashMap<>();
         private final Map<String, String> partFiles = new HashMap<>();
         private final Map<String, String> headers = new HashMap<>();
+        private final Map<String, String> sign = new HashMap<>();
         private String contentType = "application/json";
         private boolean ignoreSsl = true;
         private Object requestBody;
@@ -141,7 +172,6 @@ public class Api {
         private String baseUrl;
         private String host;
         private Integer port;
-        private String sign;
 
         public Builder headers(Map<String, String> headers) {
             this.headers.putAll(headers);
@@ -150,6 +180,11 @@ public class Api {
 
         public Builder header(String key, String value) {
             this.headers.put(key, value);
+            return this;
+        }
+
+        public Builder sign(String ak, String sk) {
+            this.sign.put(ak, sk);
             return this;
         }
 
@@ -227,11 +262,6 @@ public class Api {
 
         public Builder url(String url) {
             this.url = url;
-            return this;
-        }
-
-        public Builder sign(String sign) {
-            this.sign = sign;
             return this;
         }
 
