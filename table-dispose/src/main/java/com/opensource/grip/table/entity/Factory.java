@@ -6,7 +6,7 @@ import com.opensource.grip.table.row.IRow;
 import com.opensource.grip.table.sql.Sql;
 import com.opensource.grip.table.table.CsvTable;
 import com.opensource.grip.table.table.ITable;
-import com.opensource.grip.util.FileUtil;
+import com.opensource.grip.table.util.FileUtil;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 

@@ -1,8 +1,8 @@
 package com.opensource.grip.table.sql;
 
 import com.google.common.base.Preconditions;
+import com.opensource.grip.table.util.CommonUtil;
 import com.opensource.grip.table.util.ContainerConstants;
-import com.opensource.grip.util.CommonUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;

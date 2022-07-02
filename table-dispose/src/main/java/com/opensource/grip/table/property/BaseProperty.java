@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
  */
 @Getter
 public abstract class BaseProperty implements IProperty {
-    protected final static Logger logger = LoggerFactory.getLogger(BaseProperty.class);
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final String key;
     private String value;
 
