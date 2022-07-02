@@ -130,7 +130,7 @@ public class YApiParse extends BaseApiParse<ApiInfo> {
                 param = parseReqQuery(reqQuery);
             } else {
                 JSONArray reqParams = data.getJSONArray("req_params");
-                param = parseReqParams(reqParams);
+                param = parseReqQuery(reqParams);
             }
             apiInfo.setProjectId(projectId)
                     .setCatId(catId)
@@ -180,11 +180,10 @@ public class YApiParse extends BaseApiParse<ApiInfo> {
             Property property = new Property();
             String d = required != null ? required.contains(key) ? "true" : "false" : "false";
             JSONObject propertyObj = (JSONObject) value;
-            String description = propertyObj.getString("description");
             String type = ValTypeEnum.findByTypeName(propertyObj.getString("type")).getType().getSimpleName();
             String filedValue = key.contains("-") || key.contains("_")
                     ? StringUtil.lineToHump(key, true) : key;
-            property.setDescription(description)
+            property.setDescription(propertyObj.getString("description"))
                     .setType(type)
                     .setKey(key)
                     .setValue(filedValue)
@@ -207,32 +206,8 @@ public class YApiParse extends BaseApiParse<ApiInfo> {
             String key = e.getString("name");
             String filedValue = key.contains("-") || key.contains("_")
                     ? StringUtil.lineToHump(key, true) : key;
-            String required = "1".equals(e.getString("required")) ? "true" : "false";
-            String type = ValTypeEnum.findByTypeName("string").getType().getSimpleName();
-            property.setKey(key)
-                    .setValue(filedValue)
-                    .setType(type)
-                    .setRequired(required)
-                    .setDescription(e.getString("desc"));
-            list.add(property);
-        });
-        return list;
-    }
-
-    /**
-     * 解析reqParams
-     *
-     * @param reqParams 请求参数
-     * @return dto
-     */
-    private List<Property> parseReqParams(JSONArray reqParams) {
-        List<Property> list = new LinkedList<>();
-        reqParams.stream().map(e -> (JSONObject) e).forEach(e -> {
-            Property property = new Property();
-            String key = e.getString("name");
-            String filedValue = key.contains("-") || key.contains("_")
-                    ? StringUtil.lineToHump(key, true) : key;
-            String required = "true";
+            String r = e.getString("required");
+            String required = r == null ? "true" : "1".equals(r) ? "true" : "false";
             String type = ValTypeEnum.findByTypeName("string").getType().getSimpleName();
             property.setKey(key)
                     .setValue(filedValue)
