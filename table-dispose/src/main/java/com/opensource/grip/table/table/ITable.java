@@ -9,8 +9,6 @@ import com.opensource.grip.table.row.IRow;
  */
 public interface ITable extends IProperty {
 
-    String getTableName();
-
     /**
      * 数据表加载
      *

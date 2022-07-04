@@ -61,11 +61,6 @@ public abstract class BaseTable extends BaseProperty implements ITable {
     }
 
     @Override
-    public String getTableName() {
-        return getValue();
-    }
-
-    @Override
     public IRow getRow(String key) {
         if (!StringUtils.isEmpty(key)) {
             return rows.get(key.toLowerCase());
