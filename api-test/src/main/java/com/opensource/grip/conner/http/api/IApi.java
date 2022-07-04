@@ -1,6 +1,7 @@
 package com.opensource.grip.conner.http.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.opensource.grip.conner.http.config.HeadersConfig;
 import com.opensource.grip.conner.http.config.IConfig;
 import com.opensource.grip.conner.http.logger.ResponseLog;
 
@@ -52,6 +53,14 @@ public interface IApi<T> {
      * @return IApi<T>
      */
     IApi<T> addRequestBody(JSONObject requestBody);
+
+    /**
+     * 自定义头部配置
+     *
+     * @param headersConfig 头部配置
+     * @return IApi<T>
+     */
+    IApi<T> addHeadersConfig(HeadersConfig headersConfig);
 
     /**
      * 修改请求体

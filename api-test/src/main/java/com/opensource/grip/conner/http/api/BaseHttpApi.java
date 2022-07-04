@@ -19,11 +19,13 @@ public abstract class BaseHttpApi implements IApi<Response> {
      * 当前请求体
      */
     private Object currentBody;
+    private HeadersConfig headersConfig;
 
     @Override
     public ResponseLog<Response> execute() {
         Api api = buildApi();
-        api.setHeaderConfig((HeadersConfig) getConfig());
+        HeadersConfig config = headersConfig == null ? (HeadersConfig) getConfig() : headersConfig;
+        api.setHeaderConfig(config);
 
         Response response = api.getMethodEnum().getCommand().execute(api);
 
@@ -61,6 +63,12 @@ public abstract class BaseHttpApi implements IApi<Response> {
         JSONObject currentBody = (JSONObject) getCurrentBody();
         currentBody.putAll(requestBody);
         this.currentBody = currentBody;
+        return this;
+    }
+
+    @Override
+    public IApi<Response> addHeadersConfig(HeadersConfig headersConfig) {
+        this.headersConfig = headersConfig;
         return this;
     }
 

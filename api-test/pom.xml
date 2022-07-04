@@ -6,7 +6,7 @@
 
     <groupId>com.opensource.grip</groupId>
     <artifactId>api-test</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1.1-SNAPSHOT</version>
     <description>接口测试解决方案</description>
 
     <properties>
