@@ -37,10 +37,7 @@ public abstract class BaseContainer extends BaseProperty implements IContainer {
 
     @Override
     public ITable[] getTables() {
-        List<ITable> temp = new LinkedList<>();
-        for (String key : tables.keySet()) {
-            temp.add(tables.get(key));
-        }
+        List<ITable> temp = new LinkedList<>(tables.values());
         int size = temp.size();
         return temp.toArray(new ITable[size]);
     }

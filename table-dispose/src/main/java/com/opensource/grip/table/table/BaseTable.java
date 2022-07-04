@@ -7,10 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author wangmin
@@ -64,6 +61,11 @@ public abstract class BaseTable extends BaseProperty implements ITable {
     }
 
     @Override
+    public String getTableName() {
+        return getValue();
+    }
+
+    @Override
     public IRow getRow(String key) {
         if (!StringUtils.isEmpty(key)) {
             return rows.get(key.toLowerCase());
@@ -73,10 +75,7 @@ public abstract class BaseTable extends BaseProperty implements ITable {
 
     @Override
     public IRow[] getRows() {
-        List<IRow> temp = new LinkedList<>();
-        for (String key : rows.keySet()) {
-            temp.add(rows.get(key));
-        }
+        List<IRow> temp = new LinkedList<>(rows.values());
         int size = temp.size();
         return temp.toArray(new IRow[size]);
     }
