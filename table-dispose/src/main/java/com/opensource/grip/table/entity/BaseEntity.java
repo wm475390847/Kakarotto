@@ -55,8 +55,8 @@ public abstract class BaseEntity<S, F> implements IEntity<S, F> {
 
     @Override
     public String getFieldValue(String fieldName) {
-        if (current != null && current.getField(fieldName) != null) {
-            return current.getField(fieldName).getValue();
+        if (current != null && current.findField(fieldName) != null) {
+            return current.findField(fieldName).getValue();
         } else {
             return null;
         }

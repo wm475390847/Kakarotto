@@ -20,7 +20,10 @@ public abstract class BaseProperty implements IProperty {
 
     @Override
     public String toString() {
-        return "BasicProperty [key=" + key + ", value=" + value + "]";
+        return "BaseProperty{" +
+                "key='" + key + '\'' +
+                ", value='" + value + '\'' +
+                '}';
     }
 
     @Override

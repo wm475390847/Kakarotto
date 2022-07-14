@@ -97,7 +97,7 @@ public class Factory implements IFactory {
 
     private JSONObject createJb(IRow row) {
         JSONObject object = new JSONObject();
-        Arrays.stream(row.getFields()).forEach(field -> object.put(field.getKey(), row.getField(field.getKey()).getValue()));
+        Arrays.stream(row.getFields()).forEach(field -> object.put(field.getKey(), row.findField(field.getKey()).getValue()));
         return object;
     }
 }

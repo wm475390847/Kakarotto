@@ -1,13 +1,14 @@
 package com.opensource.grip.table.row;
 
+import com.google.common.base.Preconditions;
 import com.opensource.grip.table.field.IField;
 import com.opensource.grip.table.property.BaseProperty;
+import com.opensource.grip.table.property.IProperty;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,63 +46,39 @@ public abstract class BaseRow extends BaseProperty implements IRow {
 
     @Override
     public IField[] getFields() {
-        List<IField> temp = new LinkedList<>();
-        for (String key : fields.keySet()) {
-            temp.add(fields.get(key));
-        }
-        final int size = temp.size();
-        return temp.toArray(new IField[size]);
+        return new LinkedList<>(this.fields.values()).toArray(new IField[0]);
     }
 
     @Override
     public String[] getFieldsKey() {
-        List<String> temp = new LinkedList<>(fields.keySet());
-        final int size = temp.size();
-        return temp.toArray(new String[size]);
+        return new LinkedList<>(this.fields.keySet()).toArray(new String[0]);
     }
 
     @Override
     public String[] getFieldsValue() {
-        List<String> temp = new LinkedList<>();
-        for (String key : fields.keySet()) {
-            temp.add(String.valueOf(fields.get(key).getValue()));
-        }
-        final int size = temp.size();
-        return temp.toArray(new String[size]);
+        return this.fields.values().stream().map(IProperty::getValue).toArray(String[]::new);
     }
 
     @Override
-    public IField getField(String key) {
-        if (!StringUtils.isEmpty(key)) {
-            return fields.get(key);
-        }
-        return null;
+    public IField findField(String key) {
+        return StringUtils.isEmpty(key) ? null : this.fields.get(key);
     }
 
     @Override
     public IField[] findFields(String name) {
-        List<IField> tempFields = new LinkedList<>();
-        if (name != null) {
-            for (String key : fields.keySet()) {
-                String fieldName = fields.get(key).getKey();
-                if (fieldName.equals(name)) {
-                    tempFields.add(fields.get(key));
-                }
-            }
-        }
-        int size = tempFields.size();
-        return tempFields.toArray(new IField[size]);
+        Preconditions.checkArgument(StringUtils.isEmpty(name), "字段名称不能为空");
+        return this.fields.values().stream().filter(iField -> iField.getValue().contains(name)).toArray(IField[]::new);
     }
 
     @Override
     public boolean containsKey(String keyName) {
-        return fields.containsKey(keyName);
+        return this.fields.containsKey(keyName);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("SimpleRow [fields=");
+        sb.append("SimpleRow{fields=");
         int i = 0;
         for (String key : fields.keySet()) {
             sb.append(fields.get(key).getKey());
@@ -112,7 +89,7 @@ public abstract class BaseRow extends BaseProperty implements IRow {
                 sb.append(",");
             }
         }
-        sb.append("]");
+        sb.append("}");
         sb.append(";");
         sb.append(super.toString());
         return sb.toString();

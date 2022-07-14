@@ -64,12 +64,12 @@ public class Runner {
     }
 
     private void load() {
-        ITable dataContainerTable = ruleContainer.getTable(Constants.SHEET_TITLE_CONTAINER);
+        ITable dataContainerTable = ruleContainer.findTable(Constants.SHEET_TITLE_CONTAINER);
         dataContainerTable.load();
         Arrays.stream(dataContainerTable.getRows()).forEach(sheetOne -> {
             AliYunConfigPO config = new AliYunConfigPO();
-            config.initConfig(sheetOne.getField(Constants.CONTAINER_COLUMN_PATH).getValue());
-            ITable dataSourceTable = ruleContainer.getTable(Constants.SHEET_TITLE_DATA_SOURCE);
+            config.initConfig(sheetOne.findField(Constants.CONTAINER_COLUMN_PATH).getValue());
+            ITable dataSourceTable = ruleContainer.findTable(Constants.SHEET_TITLE_DATA_SOURCE);
             dataSourceTable.load();
             List<OtsTablePO> list = new ArrayList<>();
             IRow[] dataSourceRows = dataSourceTable.getRows();

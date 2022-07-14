@@ -61,18 +61,13 @@ public abstract class BaseTable extends BaseProperty implements ITable {
     }
 
     @Override
-    public IRow getRow(String key) {
-        if (!StringUtils.isEmpty(key)) {
-            return rows.get(key.toLowerCase());
-        }
-        return null;
+    public IRow findRow(String key) {
+        return StringUtils.isEmpty(key) ? null : this.rows.get(key.toLowerCase());
     }
 
     @Override
     public IRow[] getRows() {
-        List<IRow> temp = new LinkedList<>(rows.values());
-        int size = temp.size();
-        return temp.toArray(new IRow[size]);
+        return new LinkedList<>(this.rows.values()).toArray(new IRow[0]);
     }
 
     @Override

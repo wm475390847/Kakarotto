@@ -16,6 +16,7 @@
         <module>table-dispose</module>
         <module>data-check</module>
         <module>util</module>
+        <module>table</module>
     </modules>
 
     <groupId>com.opensource</groupId>

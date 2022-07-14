@@ -56,14 +56,14 @@ public class OtsTablePO implements Serializable {
         Arrays.stream(rows).forEach(iRow -> {
             Preconditions.checkArgument(iRow != null, "行数据为空");
             //关键字不可为空
-            IField regionField = iRow.getField("region");
+            IField regionField = iRow.findField("region");
             Preconditions.checkArgument(regionField != null, "字段region为空");
             //关键字不可为空
-            IField startTimeField = iRow.getField("start_time");
+            IField startTimeField = iRow.findField("start_time");
             Preconditions.checkArgument(startTimeField != null, "字段start_time为空");
             String region = regionField.getValue();
             String startTime = startTimeField.getValue();
-            String userId = iRow.getField("user_id") == null ? "N" : iRow.getField("user_id").getValue();
+            String userId = iRow.findField("user_id") == null ? "N" : iRow.findField("user_id").getValue();
             JSONArray regions = JSONArray.parseArray(region);
             for (int i = 0; i < regions.size(); i++) {
                 JSONObject jsonObject = regions.getJSONObject(i);

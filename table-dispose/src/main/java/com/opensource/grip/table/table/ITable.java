@@ -44,7 +44,7 @@ public interface ITable extends IProperty {
      * @param key 行的key，大小写不敏感
      * @return IRow
      */
-    IRow getRow(String key);
+    IRow findRow(String key);
 
     /**
      * 返回所有的行数据

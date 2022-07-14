@@ -50,7 +50,7 @@ public interface IRow extends IProperty {
      * @param key 标识符，大小写不敏感
      * @return IField 如果存在此字段，返回对象，否则返回null
      */
-    IField getField(String key);
+    IField findField(String key);
 
     /**
      * 查找字段 ，支持模糊查找

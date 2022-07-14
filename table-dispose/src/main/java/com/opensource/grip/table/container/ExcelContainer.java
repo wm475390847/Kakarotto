@@ -47,39 +47,39 @@ public class ExcelContainer extends BaseContainer {
         return false;
     }
 
-    @Override
-    public boolean setTable(ITable table) {
-        if (table != null) {
-            logger.info("开始写入...");
-            Workbook workbook = read();
-            if (workbook != null) {
-                Sheet sheet = workbook.getSheet(table.getKey());
-                for (int i = hsaHeader ? 1 : 0; i <= sheet.getLastRowNum(); i++) {
-                    Row row = sheet.getRow(i);
-                    if (row == null) {
-                        continue;
-                    }
-                    IRow newRow = table.getRows()[i == 0 ? i : i - 1];
-                    for (int j = 0; j < row.getLastCellNum(); j++) {
-                        Cell cell = row.getCell(j);
-                        if (cell == null) {
-                            continue;
-                        }
-                        cell.setCellValue(newRow.getFieldsValue()[j]);
-                    }
-                }
-                try (FileOutputStream out = new FileOutputStream(getPath())) {
-                    workbook.write(out);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                logger.info("写入完成...");
-                return true;
-            }
-            return false;
-        }
-        return false;
-    }
+//    @Override
+//    public boolean setTable(ITable table) {
+//        if (table != null) {
+//            logger.info("开始写入...");
+//            Workbook workbook = read();
+//            if (workbook != null) {
+//                Sheet sheet = workbook.getSheet(table.getKey());
+//                for (int i = hsaHeader ? 1 : 0; i <= sheet.getLastRowNum(); i++) {
+//                    Row row = sheet.getRow(i);
+//                    if (row == null) {
+//                        continue;
+//                    }
+//                    IRow newRow = table.getRows()[i == 0 ? i : i - 1];
+//                    for (int j = 0; j < row.getLastCellNum(); j++) {
+//                        Cell cell = row.getCell(j);
+//                        if (cell == null) {
+//                            continue;
+//                        }
+//                        cell.setCellValue(newRow.getFieldsValue()[j]);
+//                    }
+//                }
+//                try (FileOutputStream out = new FileOutputStream(getPath())) {
+//                    workbook.write(out);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                logger.info("写入完成...");
+//                return true;
+//            }
+//            return false;
+//        }
+//        return false;
+//    }
 
     private Workbook read() {
         try {

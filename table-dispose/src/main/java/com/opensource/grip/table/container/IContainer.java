@@ -49,15 +49,15 @@ public interface IContainer extends IProperty {
     ITable[] getTables();
 
     /**
-     * 获取指定表
+     * 查询表
      *
      * @param tableName 表名
-     * @return org.dragon.box.table
+     * @return table
      */
-    ITable getTable(String tableName);
+    ITable findTable(String tableName);
 
     /**
-     * 查询表名
+     * 查询表集合
      *
      * @param tableName 表名
      * @return tables
@@ -65,10 +65,11 @@ public interface IContainer extends IProperty {
     ITable[] findTables(String tableName);
 
     /**
-     * 设置表
+     * 写入
      *
-     * @param table 新表
-     * @return boolean
+     * @return 是否写入成功
      */
-    boolean setTable(ITable table);
+    default boolean write() {
+        return false;
+    }
 }

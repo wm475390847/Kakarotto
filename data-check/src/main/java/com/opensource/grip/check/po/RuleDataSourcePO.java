@@ -28,10 +28,10 @@ public class RuleDataSourcePO implements Serializable {
      * @return 数据源
      */
     public RuleDataSourcePO initDataSource(IRow row) {
-        this.primaryKeys = parse(row.getField(Constants.DATA_SOURCE_COLUMN_KEY).getValue());
-        this.sourceName = row.getField(Constants.DATA_SOURCE_COLUMN_NAME).getValue();
-        this.container = row.getField(Constants.DATA_SOURCE_COLUMN_CONTAINER).getValue();
-        String[] paths = row.getField(Constants.DATA_SOURCE_COLUMN_PATH).getValue().split("/");
+        this.primaryKeys = parse(row.findField(Constants.DATA_SOURCE_COLUMN_KEY).getValue());
+        this.sourceName = row.findField(Constants.DATA_SOURCE_COLUMN_NAME).getValue();
+        this.container = row.findField(Constants.DATA_SOURCE_COLUMN_CONTAINER).getValue();
+        String[] paths = row.findField(Constants.DATA_SOURCE_COLUMN_PATH).getValue().split("/");
         this.instancePath = paths[0];
         this.tablePath = paths[1];
         return this;

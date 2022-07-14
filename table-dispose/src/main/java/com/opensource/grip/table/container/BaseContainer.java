@@ -1,5 +1,6 @@
 package com.opensource.grip.table.container;
 
+import com.google.common.base.Preconditions;
 import com.opensource.grip.table.property.BaseProperty;
 import com.opensource.grip.table.table.ITable;
 import com.opensource.grip.table.util.ContainerConstants;
@@ -9,9 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author wangmin
@@ -37,9 +36,7 @@ public abstract class BaseContainer extends BaseProperty implements IContainer {
 
     @Override
     public ITable[] getTables() {
-        List<ITable> temp = new LinkedList<>(tables.values());
-        int size = temp.size();
-        return temp.toArray(new ITable[size]);
+        return new LinkedList<>(tables.values()).toArray(new ITable[0]);
     }
 
     @Override
@@ -54,19 +51,14 @@ public abstract class BaseContainer extends BaseProperty implements IContainer {
 
     @Override
     public ITable[] findTables(String tableName) {
-        List<ITable> temp = new LinkedList<>();
-        if (!StringUtils.isEmpty(tableName)) {
-            temp.addAll(tables.entrySet().stream().filter(e -> e.getKey().contains(tableName))
-                    .map(Map.Entry::getValue).collect(Collectors.toCollection(LinkedList::new)));
-        }
-        final int size = temp.size();
-        return temp.toArray(new ITable[size]);
+        Preconditions.checkArgument(StringUtils.isNotEmpty(tableName), "查询表名不能为空");
+        return this.tables.values().stream().filter(e -> e.getKey().contains(tableName)).toArray(ITable[]::new);
     }
 
     @Override
-    public ITable getTable(String tableName) {
-        return tables.entrySet().stream().filter(e -> e.getKey().equals(tableName))
-                .map(Map.Entry::getValue).findFirst().orElse(null);
+    public ITable findTable(String tableName) {
+        Preconditions.checkArgument(StringUtils.isNotEmpty(tableName), "查询表名不能为空");
+        return this.tables.values().stream().filter(e -> e.getKey().equals(tableName)).findFirst().orElse(null);
     }
 
     @Override
@@ -74,10 +66,10 @@ public abstract class BaseContainer extends BaseProperty implements IContainer {
         this.path = path;
     }
 
-    @Override
-    public boolean setTable(ITable table) {
-        return false;
-    }
+//    @Override
+//    public boolean setTable(ITable table) {
+//        return false;
+//    }
 
     public abstract static class BaseBuilder<T extends BaseBuilder<?, ?>, R extends IContainer>
             extends BaseProperty.BaseBuilder<T, R> {

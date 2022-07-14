@@ -16,14 +16,14 @@ public interface IProperty {
     String getKey();
 
     /**
-     * 获取值
+     * 获取标识值
      *
      * @return Object
      */
     String getValue();
 
     /**
-     * 设置值
+     * 设置标识值
      *
      * @param value 值
      */
