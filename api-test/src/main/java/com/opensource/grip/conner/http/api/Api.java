@@ -31,7 +31,6 @@ public class Api {
     private final boolean isSign;
     private final MethodEnum methodEnum;
     private final String path;
-    private final String method;
     private final String url;
 
     private String host;
@@ -52,7 +51,6 @@ public class Api {
         this.ignoreSsl = builder.ignoreSsl;
         this.baseUrl = builder.baseUrl;
         this.url = builder.url;
-        this.method = builder.method;
         this.host = builder.host;
         this.path = builder.path;
         this.port = builder.port;
@@ -175,7 +173,6 @@ public class Api {
         private boolean isSign = true;
         private Object requestBody;
         private MethodEnum methodEnum;
-        private String method;
         private String path;
         private String url;
         private String baseUrl;
@@ -244,8 +241,9 @@ public class Api {
             return this;
         }
 
+        @Deprecated
         public Builder method(String method) {
-            this.method = method;
+            this.methodEnum = MethodEnum.findEnumByType(method);
             return this;
         }
 

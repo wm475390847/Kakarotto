@@ -39,7 +39,7 @@ public enum MethodEnum {
     /**
      * multipart请求
      */
-    MULTIPART("multipart", new MultipartCommand()),
+    MULTIPART("MULTIPART", new MultipartCommand()),
     ;
 
     MethodEnum(String methodType, AbstractCommand command) {

@@ -15,18 +15,12 @@ public enum ContainerEnum {
      * 数据库地址
      */
     DB_BUSINESS_PORSCHE(new DbContainer.Builder().driverName("com.mysql.cj.jdbc.Driver")
-            .jdbcUrl("jdbc:mysql://rm-2zeg4an1kr1437xu6no.mysql.rds.aliyuncs.com/business-porsche")
-            .password("read_only").username("read_only").build()),
+            .jdbcUrl("")
+            .password("").username("").build()),
 
-    DB_ONE_PIECE(new DbContainer.Builder().driverName("com.mysql.cj.jdbc.Driver")
-            .jdbcUrl("jdbc:mysql://rm-2zeg4an1kr1437xu6no.mysql.rds.aliyuncs.com/onepiece")
-            .password("qa_wr1234").username("qa_wr").build()),
+    EXCEL(new ExcelContainer.Builder().
 
-    MALL_ONLINE(new DbContainer.Builder().driverName("com.mysql.cj.jdbc.Driver")
-            .jdbcUrl("jdbc:mysql://retail-online-polardb.mysql.polardb.rds.aliyuncs.com/business-analysis")
-            .password("winsense@mall123").username("mall_read_only").build()),
-
-    EXCEL(new ExcelContainer.Builder().buildContainer()),
+            buildContainer()),
     ;
 
     ContainerEnum(IContainer container) {

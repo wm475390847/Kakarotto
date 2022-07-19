@@ -16,7 +16,7 @@ public interface IGenerator {
     /**
      * 加载
      *
-     * @return IMarker
+     * @return IGenerator
      */
     IGenerator load();
 }
